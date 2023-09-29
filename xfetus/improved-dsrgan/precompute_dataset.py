@@ -29,6 +29,7 @@ if __name__ == "__main__":
     images_path = root_dir + 'Images/'
     csv_path = root_dir + 'FETAL_PLANES_DB_data.csv'
     csv_file = pd.read_csv(csv_path, sep=';')
+    image_size = 128
 
     # Filter dataset
     e6_metadata = csv_file[csv_file['US_Machine'] == 'Voluson E6']
@@ -49,7 +50,7 @@ if __name__ == "__main__":
       print(len(train_metadata))
 
       # Define empty dataset as numpy array of zeros
-      train_dataset = np.zeros((train_dataset_size, 64, 64), dtype = np.float32)
+      train_dataset = np.zeros((train_dataset_size, image_size, image_size), dtype = np.float32)
 
       # Precompute the training dataset
       count = 0
@@ -63,7 +64,7 @@ if __name__ == "__main__":
           image = io.imread(img_file_name)
           # Preprocess and augment the image
           image = transform_operations(image)
-          small_image = cv2.resize(image[0,...].cpu().detach().numpy(), dsize=(64, 64), interpolation=cv2.INTER_CUBIC)
+          small_image = cv2.resize(image[0,...].cpu().detach().numpy(), dsize=(image_size, image_size), interpolation=cv2.INTER_CUBIC)
 
           # normalize image to be between -1 and 1
           small_image = small_image - 0.5
@@ -83,7 +84,7 @@ if __name__ == "__main__":
       print(len(validation_metadata))
 
       # Define empty dataset as numpy array of zeros
-      validation_dataset = np.zeros((validation_dataset_size, 64, 64), dtype = np.float32)
+      validation_dataset = np.zeros((validation_dataset_size, image_size, image_size), dtype = np.float32)
 
       # Create the validation dataset
       count = 0
@@ -102,7 +103,7 @@ if __name__ == "__main__":
           
           # Preprocess and augment the image
           image = transform_operations(image)
-          small_image = cv2.resize(image[0,...].cpu().detach().numpy(), dsize=(64, 64), interpolation=cv2.INTER_CUBIC)
+          small_image = cv2.resize(image[0,...].cpu().detach().numpy(), dsize=(image_size, image_size), interpolation=cv2.INTER_CUBIC)
 
           # normalize image to be between -1 and 1
           small_image = small_image - 0.5
