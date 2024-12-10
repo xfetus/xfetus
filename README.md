@@ -1,4 +1,4 @@
-<h1 align="center"> xfetus - A Python-based library for synthesising ultrasound images of fetal development (:baby: :brain: :robot:) </h1>   
+# xfetus - A Python-based library for synthesising ultrasound images of fetal development (:baby: :brain: :robot:)
 [![PyPI version](https://badge.fury.io/py/xfetus.svg)](https://badge.fury.io/py/xfetus)
 
 xfetus is a Python-based library designed to synthesise fetal ultrasound images using state-of-the-art generative models, including GANs, transformers, diffusion models, and flow matching models. It also provides tools for assessing image synthesis quality through metrics such as FID, PSNR, SSIM, and Visual Turing Tests, along with access to relevant research publications.
