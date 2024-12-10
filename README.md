@@ -1,8 +1,7 @@
-# xfetus - python-based library for synthesis of ultrasound fetal imaging (:baby: :brain: :robot:) :warning: WIP :warning:
+<h1 align="center"> xfetus - A Python-based library for synthesising ultrasound images of fetal development (:baby: :brain: :robot:) </h1>   
 [![PyPI version](https://badge.fury.io/py/xfetus.svg)](https://badge.fury.io/py/xfetus)
 
-xfetus is a python-based library to syntheses fetal ultrasound images using GAN, transformers and diffusion models.
-It also includes methods to quantify the quality of image synthesis (FID, PSNR, SSIM, and Visual Turing Tests) along with related publications.
+xfetus is a Python-based library designed to synthesise fetal ultrasound images using state-of-the-art generative models, including GANs, transformers, diffusion models, and flow matching models. It also provides tools for assessing image synthesis quality through metrics such as FID, PSNR, SSIM, and Visual Turing Tests, along with access to relevant research publications.
 
 ## Installation
 ```
@@ -17,8 +16,8 @@ You can develop locally:
 * Generate your SSH keys as suggested [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (or [here](https://github.com/mxochicale/tools/blob/main/github/SSH.md))
 * Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine:
 ```
-cd && mkdir -p $HOME/repositories/budai4medtech && cd  $HOME/repositories/budai4medtech
-git clone git@github.com:budai4medtech/xfetus.git
+cd && mkdir -p $HOME/repositories/xfetus && cd  $HOME/repositories/xfetus
+git clone git@github.com:xfetus/xfetus.git
 ```
 
 ## Presentation
@@ -74,24 +73,13 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
   <tr>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
-		<!-- ADD GITHUB USERNAME AND HASH FOR GITHUB PHOTO -->
-		<a href="https://github.com/???"><img src="https://avatars1.githubusercontent.com/u/23114020?v=4?s=100" width="100px;" alt=""/>
-		<br />
-			<sub> <b>ADD NAME SURNAME</b> </sub>        
-		</a>
-		<br />
-			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
-			<a href="https://github.com/$PROJECTNAME/$REPOSITORY_NAME/commits?author=" title="Research">  🔬 🤔  </a>
-	</td>
-	<!-- CONTRIBUTOR -->
-	<td align="center">
 		<a href="https://github.com/sfmig"><img src="https://avatars1.githubusercontent.com/u/33267254?v=4?s=100" width="100px;" alt=""/>
 		<br />
 			<sub> <b>Sofia Miñano</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=sfmig" title="Code">💻</a> 
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=sfmig" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=sfmig" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=sfmig" title="Research">  🔬 🤔  </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -100,8 +88,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<sub> <b>Zhanxiang (Sean) Sun</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=seansunn" title="Code">💻</a> 
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=seansunn" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=seansunn" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=seansunn" title="Research">  🔬 🤔  </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -110,8 +98,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<sub> <b>Harvey Mannering</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=harveymannering" title="Code">💻</a> 
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=harveymannering" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=harveymannering" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=harveymannering" title="Research">  🔬 🤔  </a>
 	</td>
     <!-- CONTRIBUTOR -->
 	<td align="center">
@@ -122,17 +110,17 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 		</a>
 		<br />
 			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
-            <a href="https://github.com/budai4medtech/xfetus/commits?author=michellepi" title="Code">💻</a>
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=michellepi" title="Research">  🔬 🤔  </a>
+            <a href="https://github.com/xfetus/xfetus/commits?author=michellepi" title="Code">💻</a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=michellepi" title="Research">  🔬 🤔  </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
-		<a href="https://github.com/budai4medtech"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/>
+		<a href="https://github.com/xfetus"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/>
 			<br />
 			<sub><b>Miguel Xochicale</b></sub>          
 			<br />
 		</a>
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=mxochicale" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=mxochicale" title="Code">💻</a> 
 			<a href="ttps://github.com/budai4medtech/xfetus/commits?author=mxochicale" title="Documentation">📖  🔧 </a>
 	</td>
   </tr>
