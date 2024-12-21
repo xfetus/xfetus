@@ -20,18 +20,13 @@ cd && mkdir -p $HOME/repositories/xfetus && cd  $HOME/repositories/xfetus
 git clone git@github.com:xfetus/xfetus.git
 ```
 
-## Presentation
-* [Good practices in AI/ML for Ultrasound Fetal Brain Imaging Synthesis](docs/event/README.md) for the deep learning and computer vision Journal Club on 1st of June 2023, 15:00 GMT.
-
 ## Articles 
-
-> Iskandar, Michelle, Harvey Mannering, Zhanxiang Sun, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta, and Miguel Xochicale. "Towards realistic ultrasound fetal brain imaging synthesis." arXiv preprint arXiv:2304.03941 (2023). Published in Medical Imaging with Deep Learning, MIDL 2023 Short paper track 
-[github-repository](https://github.com/xfetus/midl2023)
+> Iskandar, Michelle, Harvey Mannering, Zhanxiang Sun, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta, and Miguel Xochicale. **"Towards realistic ultrasound fetal brain imaging synthesis."** arXiv preprint arXiv:2304.03941 (2023). Published in Medical Imaging with Deep Learning, MIDL 2023 Short paper track. Nashville, TN, US  Jul 10 2023.
+[Github-repository](https://github.com/xfetus/midl2023)
 [arXiv-preprint](https://arxiv.org/abs/2304.03941)
 [open-review](https://openreview.net/forum?id=mad9Y_7khs)
 [google-citations](https://scholar.google.com/scholar?cites=12233870367431892152&as_sdt=2005&sciodt=0,5&hl=en)
-
-BibTeX to cite
+and BibTeX to cite:
 ```
 @misc{iskandar-midl2023,
       author={
@@ -54,12 +49,12 @@ BibTeX to cite
 ``` 
 
 
-> Bautista, Thea, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta Pereira, and Miguel Xochicale. "Empirical study of quality image assessment for synthesis of fetal head ultrasound imaging with dcgans." arXiv preprint arXiv:2206.01731 (2022). Published at the 26th Conference on Medical Image Understanding and Analysis (MIUA 2022), Cambridge, 27-29 July 2022.
+> Bautista, Thea, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta Pereira, and Miguel Xochicale. **"Empirical study of quality image assessment for synthesis of fetal head ultrasound imaging with dcgans."** arXiv preprint arXiv:2206.01731 (2022). Published in the 26th Conference on Medical Image Understanding and Analysis (MIUA 2022), Cambridge, 27-29 July 2022.
 [github-repository](https://github.com/xfetus/miua2022)
 [arXiv-preprint](https://arxiv.org/abs/2206.01731)
 [google-citations](https://scholar.google.com/scholar?cites=3216210477950210889&as_sdt=2005&sciodt=0,5&hl=en)
 [YouTube-video-poster-presentation](https://www.youtube.com/watch?v=wNKgScMzjPY)
-BibTeX to cite
+and BibTeX to cite:
 ```
 @misc{bautista-miua2022,
   author = {Bautista, Thea and 
@@ -78,6 +73,9 @@ BibTeX to cite
   	{Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 ```
+
+## Presentation
+* [Good practices in AI/ML for Ultrasound Fetal Brain Imaging Synthesis](docs/event/README.md) for the deep learning and computer vision Journal Club on 1st of June 2023, 15:00 GMT.
 
 ## Contributors
 Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):  
