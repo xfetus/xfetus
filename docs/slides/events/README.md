@@ -34,5 +34,5 @@ Miguel Xochicale
 Miguel is a Research Engineer at University College London within the Advanced Research Computing Centre and WEISS where he is advancing AI-based Surgical Navigation tools. Previously, he was a Research Associate at King’s College London where he advanced research in Ultrasound-Guidance Procedures and AI-enabled echocardiography pipelines. In 2019, he was awarded a Ph.D. degree in Computer Engineering from the University of Birmingham, researching “Nonlinear Analysis to Quantify Movement Variability in Human-Humanoid Interaction”. His primary research interests are in developing data-centric AI algorithms for Medical Imaging, MedTech, SurgTech, Biomechanics and clinical translation. Additionally, his work includes generative models for fetal imaging, sensor fusion data from time-series and medical imaging, real-time AI for echocardiography, image-guided procedures, AI-based surgical navigation tools, and child-robot interaction in low-resource countries.
 
 
-## Blurs
-aiming to provide understanding of essentials to train reliable, repeatable, reproducible and validated models for medical image synthesis.
+## Poster
+![fig](poster.svg)
