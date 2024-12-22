@@ -1,12 +1,14 @@
-# xfetus - python-based library for synthesis of ultrasound fetal imaging (:baby: :brain: :robot:) :warning: WIP :warning:
+# xfetus -- :baby: :brain: :robot: -- A Python-based library for synthesising ultrasound images of fetal development 
 [![PyPI version](https://badge.fury.io/py/xfetus.svg)](https://badge.fury.io/py/xfetus)
 
-xfetus is a python-based library to syntheses fetal ultrasound images using GAN, transformers and diffusion models.
-It also includes methods to quantify the quality of image synthesis (FID, PSNR, SSIM, and Visual Turing Tests) along with related publications.
+xfetus is a Python-based library designed to synthesise fetal ultrasound images using state-of-the-art generative models, including GANs, transformers, diffusion models, and flow matching models. It also provides tools for assessing image synthesis quality through metrics such as FID, PSNR, SSIM, and Visual Turing Tests, along with access to relevant research publications.
 
 ## Installation
 ```
-pip install xfetus
+uv venv --python 3.12 # Create a virtual environment at .venv.
+source .venv/bin/activate #To activate the virtual environment:
+#pip install xfetus
+uv pip install --editable . # Install the package in editable mode
 ```
 
 ## Examples 
@@ -17,17 +19,16 @@ You can develop locally:
 * Generate your SSH keys as suggested [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (or [here](https://github.com/mxochicale/tools/blob/main/github/SSH.md))
 * Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine:
 ```
-cd && mkdir -p $HOME/repositories/budai4medtech && cd  $HOME/repositories/budai4medtech
-git clone git@github.com:budai4medtech/xfetus.git
+cd && mkdir -p $HOME/repositories/xfetus && cd  $HOME/repositories/xfetus
+git clone git@github.com:xfetus/xfetus.git
 ```
 
-## Presentation
-* [Good practices in AI/ML for Ultrasound Fetal Brain Imaging Synthesis](docs/event/README.md) for the deep learning and computer vision Journal Club on 1st of June 2023, 15:00 GMT.
-
 ## Articles 
-### Citations
-BibTeX to cite
-
+> Iskandar, Michelle, Harvey Mannering, Zhanxiang Sun, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta, and Miguel Xochicale. **"Towards realistic ultrasound fetal brain imaging synthesis."** arXiv preprint arXiv:2304.03941 (2023). Published in Medical Imaging with Deep Learning, MIDL 2023 Short paper track. Nashville, TN, US  Jul 10 2023.
+[[Github-repository]](https://github.com/xfetus/midl2023); 
+[[arXiv-preprint]](https://arxiv.org/abs/2304.03941); 
+[[open-review]](https://openreview.net/forum?id=mad9Y_7khs); 
+[[google-citations]](https://scholar.google.com/scholar?cites=12233870367431892152); and BibTeX to cite:
 ```
 @misc{iskandar-midl2023,
       author={
@@ -44,10 +45,17 @@ BibTeX to cite
       archivePrefix={arXiv},
       publisher = {arXiv},
       url = {https://arxiv.org/abs/2304.03941},
-      copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
+      copyright = 
+	 	{Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 ``` 
 
+
+> Bautista, Thea, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta Pereira, and Miguel Xochicale. **"Empirical study of quality image assessment for synthesis of fetal head ultrasound imaging with dcgans."** arXiv preprint arXiv:2206.01731 (2022). Published in the 26th Conference on Medical Image Understanding and Analysis (MIUA 2022), Cambridge, 27-29 July 2022.
+[[github-repository](https://github.com/xfetus/miua2022); 
+[[arXiv-preprint]](https://arxiv.org/abs/2206.01731); 
+[[google-citations]](https://scholar.google.com/scholar?cites=3216210477950210889); 
+[[YouTube-video-poster-presentation]](https://www.youtube.com/watch?v=wNKgScMzjPY); and BibTeX to cite:
 ```
 @misc{bautista-miua2022,
   author = {Bautista, Thea and 
@@ -55,15 +63,20 @@ BibTeX to cite
             Kerdegari, Hamideh and 
             Peralta, Laura and 
             Xochicale, Miguel},
-  title = {Empirical Study of Quality Image Assessment for Synthesis of Fetal Head Ultrasound Imaging with DCGANs},  
+  title = {Empirical Study of Quality Image Assessment for 
+  			Synthesis of Fetal Head Ultrasound Imaging with DCGANs},  
   year = {2022},
   eprint={2206.01731},
   archivePrefix={arXiv},
   publisher = {arXiv},
   url = {https://arxiv.org/abs/2206.01731},
-  copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
+  copyright = 
+  	{Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 ```
+
+## Presentation
+* [Good practices in AI/ML for Ultrasound Fetal Brain Imaging Synthesis](docs/event/README.md) for the deep learning and computer vision Journal Club on 1st of June 2023, 15:00 GMT.
 
 ## Contributors
 Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):  
@@ -74,24 +87,13 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
   <tr>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
-		<!-- ADD GITHUB USERNAME AND HASH FOR GITHUB PHOTO -->
-		<a href="https://github.com/???"><img src="https://avatars1.githubusercontent.com/u/23114020?v=4?s=100" width="100px;" alt=""/>
-		<br />
-			<sub> <b>ADD NAME SURNAME</b> </sub>        
-		</a>
-		<br />
-			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
-			<a href="https://github.com/$PROJECTNAME/$REPOSITORY_NAME/commits?author=" title="Research">  🔬 🤔  </a>
-	</td>
-	<!-- CONTRIBUTOR -->
-	<td align="center">
 		<a href="https://github.com/sfmig"><img src="https://avatars1.githubusercontent.com/u/33267254?v=4?s=100" width="100px;" alt=""/>
 		<br />
 			<sub> <b>Sofia Miñano</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=sfmig" title="Code">💻</a> 
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=sfmig" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=sfmig" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=sfmig" title="Research">  🔬 🤔  </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -100,8 +102,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<sub> <b>Zhanxiang (Sean) Sun</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=seansunn" title="Code">💻</a> 
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=seansunn" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=seansunn" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=seansunn" title="Research">  🔬 🤔  </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -110,8 +112,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<sub> <b>Harvey Mannering</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=harveymannering" title="Code">💻</a> 
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=harveymannering" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=harveymannering" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=harveymannering" title="Research">  🔬 🤔  </a>
 	</td>
     <!-- CONTRIBUTOR -->
 	<td align="center">
@@ -122,17 +124,17 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 		</a>
 		<br />
 			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
-            <a href="https://github.com/budai4medtech/xfetus/commits?author=michellepi" title="Code">💻</a>
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=michellepi" title="Research">  🔬 🤔  </a>
+            <a href="https://github.com/xfetus/xfetus/commits?author=michellepi" title="Code">💻</a>
+			<a href="https://github.com/xfetus/xfetus/commits?author=michellepi" title="Research">  🔬 🤔  </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
-		<a href="https://github.com/budai4medtech"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/>
+		<a href="https://github.com/xfetus"><img src="https://avatars1.githubusercontent.com/u/11370681?v=4?s=100" width="100px;" alt=""/>
 			<br />
 			<sub><b>Miguel Xochicale</b></sub>          
 			<br />
 		</a>
-			<a href="https://github.com/budai4medtech/xfetus/commits?author=mxochicale" title="Code">💻</a> 
+			<a href="https://github.com/xfetus/xfetus/commits?author=mxochicale" title="Code">💻</a> 
 			<a href="ttps://github.com/budai4medtech/xfetus/commits?author=mxochicale" title="Documentation">📖  🔧 </a>
 	</td>
   </tr>
