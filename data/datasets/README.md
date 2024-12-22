@@ -18,16 +18,32 @@ If you find this dataset useful, please cite:
       doi="10.1038/s41598-020-67076-5",
       year={2020}
     } 
+[google-citations](https://scholar.google.com/scholar?cites=2863764666513532768)
+[article-scientific-reports](https://www.nature.com/articles/s41598-020-67076-5)
 
 * Notes
 	* "Fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular) to judge fine grain categorization performance."
 
-### path tree 
+
+### Download dataset
+```
+https://zenodo.org/records/3904280/files/FETAL_PLANES_ZENODO.zip
+mkdir -p ~/datasets/FETAL_PLANES_DB_2020 && cd ~/datasets/FETAL_PLANES_DB_2020
+wget https://zenodo.org/records/3904280/files/FETAL_PLANES_ZENODO.zip
+unzip FETAL_PLANES_ZENODO.zip
+rm FETAL_PLANES_ZENODO.zip
+```
+
+### Dataset details, size, path
+* Dimension [pixelx]: 692 x 480; 640 x 392; 768 x 519; 707 x 531; 745 x 559; 959 x 661; etc
+* Type: PNG
+* Path tree
 ```
 $ tree -fs
 [       4096]  .
 ├── [     909943]  ./FETAL_PLANES_DB_data.csv
-└── [     708608]  ./Images
+├── [     386348]  ./FETAL_PLANES_DB_data.xlsx
+├── [     708608]  ./Images
     ├── [     197528]  ./Images/Patient00001_Plane1_10_of_15.png
     ├── [     298355]  ./Images/Patient00001_Plane1_11_of_15.png
     ├── [     307171]  ./Images/Patient00001_Plane1_12_of_15.png
@@ -42,17 +58,25 @@ $ tree -fs
     ├── [     217875]  ./Images/Patient01792_Plane5_1_of_1.png
     └── [     206491]  ./Images/Patient01792_Plane6_1_of_1.png
 
-1 directory, 12401 files
+1 directory, 12403 files
 ```
 
 ## Maternal fetal ultrasound planes from low-resource imaging settings in five African countries (456 items, totalling 55.7 MB)
 > This resource is a dataset of routinely acquired maternal-fetal screening ultrasound images collected in five centers of five countries in Africa (Malawi, Egypt, Uganda, Ghana and Algeria) that is associated to the journal article Sendra-Bacells et al. "Generalisability of fetal ultrasound deep learning models to low-resource imaging settings in five African countries", Scientific Reports. The images correspond to the four most common fetal planes: abdomen, brain, femur and thorax. A CSV file is provided where image filenames are associated to plane types and patient number as well as the partitioning in training and testing splits as used in the associated publication.
-https://zenodo.org/record/7540448
+[[zenodo]](https://zenodo.org/record/7540448); [[pre-print]](https://scholar.google.com/scholar?cites=7480279748661179087&as_sdt=2005&sciodt=0,5&hl=en); [[google-scholar]](https://scholar.google.com/scholar?cites=7480279748661179087)
 
 ![fig](SendraBalcells2023_fig1.png)
 ![fig](SendraBalcells2023_table1.png)
 
 
+### Download dataset
+```
+mkdir -p ~/datasets/african-fetal-us-2023 && cd ~/datasets/african-fetal-us-2023
+wget https://zenodo.org/records/7540448/files/Zenodo_dataset.tar.xz
+tar xf Zenodo_dataset.tar.xz
+rm Zenodo_dataset.tar.xz
+#mv mage to root data path
+```
 
 ### Images details
 
@@ -135,3 +159,19 @@ cp Uganda/*.png Images/
 > "Generalisability of fetal ultrasound deep learning models to low-resource imaging settings in five African countries." 
 > Scientific reports 13, no. 1 (2023): 2728.
 
+
+## Large-Scale Annotation Dataset for Fetal Head Biometry in Ultrasound Images
+* Diverse Fetal Head Images-orginal-image.zip (2.4 GB)
+* License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+* Total Images: 3,832
+* Image Dimensions: 959 x 661 pixels
+* Link https://zenodo.org/records/8265464
+
+Alzubaidi, Mahmood, Uzair Shah, Marco Agus, and Mowafa Househ. "FetSAM: Advanced Segmentation Techniques for Fetal Head Biometrics in Ultrasound Imagery." IEEE Open Journal of Engineering in Medicine and Biology (2024). 
+[article](https://ieeexplore.ieee.org/abstract/document/10480532/)
+[google-citations](https://scholar.google.com/scholar?cites=14101294037409299090&as_sdt=2005&sciodt=0,5&hl=en)
+
+### Download
+```
+wget https://zenodo.org/api/records/8265464/files-archive -O DiverseFetalHeadImages-orginal-image.zip
+```
