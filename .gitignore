@@ -51,7 +51,7 @@
 **/*.blg
 **/*.out
 **/comment.cut
-
+**/*.npy
 
 # Distribution / packaging
 build/

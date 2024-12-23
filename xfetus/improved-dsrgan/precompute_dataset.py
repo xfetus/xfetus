@@ -9,8 +9,11 @@ import pandas as pd
 from torchvision import transforms
 
 if __name__ == "__main__":
-
-
+    """
+    Script to create numpy arrays with train and validation datasets per label
+    
+    python precompute_dataset.py -d $HOME/datasets/FETAL_PLANES_DB_2020/
+    """
     # Command line aurgments - for script
     parser = argparse.ArgumentParser()
     parser.add_argument("-d", "--dataset_path", help="File location of the fetal brain dataset", type=str)
@@ -77,6 +80,7 @@ if __name__ == "__main__":
           count += 1
 
       # Save training data
+      #TODO add path to save MODEL_DEV
       np.save(p + ' train.npy', train_dataset)
 
       # Get the test data 
@@ -115,4 +119,6 @@ if __name__ == "__main__":
           validation_dataset[count,...] = small_image
           count += 1
         print(count)
+
+      #TODO add path to save MODEL_DEV
       np.save(p + ' validation.npy', validation_dataset)

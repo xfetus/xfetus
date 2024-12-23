@@ -1,10 +1,44 @@
 # Creating virtual environments
 
-## Install mamba
+
+## uv
+
+###  Install uv: "An extremely fast Python package manager".
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Create venv
+```
+uv venv --python 3.12 # Create a virtual environment at .venv.
+source .venv/bin/activate #To activate the virtual environment:
+# deactivate
+
+#remove
+#uv venv 2nd_env --python 3.13 #create with a diff python version
+#rm -rf 2nd_env #to remove 2nd_env
+```
+
+### Activate VE and install lib
+```
+source .venv/bin/activate #To activate the virtual environment:
+uv pip install --editable . # Install the package in editable mode
+```
+
+### lauch jupyter notebooks
+``` 
+source .venv/bin/activate #To activate the virtual environment:
+#? export PYTHONPATH=.
+jupyter notebook --browser=firefox
+```
+
+
+## conda/mamba
+
+### Install mamba
 Install [mamba](https://github.com/mxochicale/code/tree/main/mamba) 
 
 ## Create virtual environment
-### simple env
 ```
 mamba update -n base mamba
 mamba create -n xfetusVE python=3.8 pip -c conda-forge
@@ -17,45 +51,14 @@ mamba activate xfetusVE
 ```
 mamba update -n base mamba
 mamba env create -f ve.yml
-
-  Summary:
-  Install: 83 packages
-  Total download: 479MB
-
-...
-
-mkl                                                209.3MB @ 538.3kB/s 1m:43.2s
-cudatoolkit                                        872.0MB @   1.8MB/s 7m:54.6s
-pytorch                                              1.5GB @   2.8MB/s 8m:58.7s
-
-...
-
-
-
-
-
 ```
 
-## Check dependencies
-
-* Python package versions
-```
-$ cd $HOME/.../dependencies
-$ mamba activate xfetusVE
-$ python package_versions.py 
+### build
+mamba install conda-build
+conda skeleton pypi xfetus
 
 
-
-python: 3.11.4 | packaged by conda-forge | (main, Jun 10 2023, 18:08:17) [GCC 12.2.0]
-torch: 2.0.0.post200
-torchvision: 0.15.2a0+072ec57
-torch cuda_is_available: True
-torch cuda version: 11.2
-torch cuda.device_count  1
-PIL: 10.0.0
-
-```
-
+## Hardware 
 * OS
 ```
 $ hostnamectl
@@ -78,9 +81,9 @@ $ nvidia-smi -q
 
 ==============NVSMI LOG==============
 
-Timestamp                                 : Sat Dec 17 13:27:52 2022
-Driver Version                            : 520.61.05
-CUDA Version                              : 11.8
+Timestamp                                 : Mon Dec 23 18:12:14 2024
+Driver Version                            : 560.35.05
+CUDA Version                              : 12.6
 
 Attached GPUs                             : 1
 GPU 00000000:01:00.0
@@ -89,8 +92,3 @@ GPU 00000000:01:00.0
     Product Architecture                  : Ampere
 
 ```
-
-
-## conda-build
-mamba install conda-build
-conda skeleton pypi xfetus

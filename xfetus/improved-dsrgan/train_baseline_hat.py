@@ -21,6 +21,11 @@ from sr_dataset import FetalPlaneDataset
 from hat_utils import parse_options
 
 if __name__ == "__main__":
+    """
+    Script to train baseline model with HAT model
+
+    python train_baseline_hat.py -d 
+    """
 
     ##################
     ##   1. SETUP   ##
@@ -214,6 +219,7 @@ if __name__ == "__main__":
         print("Epoch " + str(e) + ", Avg Validation Loss: " + str(sum(validation_losses) / len(validation_losses)))
 
         # Save models and optimiser state every 10 epochs
+        #TODO add path to save MODEL_DEV
         saving_interval = 50
         if (e+1) % saving_interval == 0:
             torch.save(model.net_g.state_dict(), 'HAT_ft_' + str(e) + '.pth')

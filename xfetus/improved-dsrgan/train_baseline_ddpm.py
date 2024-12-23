@@ -15,6 +15,12 @@ import matplotlib.pyplot as plt
 from ddpm_dataset import PrecomputedFetalPlaneDataset
 
 if __name__ == "__main__":
+    """
+    Train baseline Denoising Diffusion Probabilistic Models (DDPM)
+
+    Example to run api:
+        python -d $HOME/repositories/xfetus/xfetus/xfetus/improved-dsrgan
+    """
 
     ##################
     ##   1. SETUP   ##
@@ -270,6 +276,7 @@ if __name__ == "__main__":
 
 
         # Save model
+        #TODO add path to save MODEL_DEV
         if lowest_validation_loss > average_validation_loss:
             torch.save(image_pipe.unet.state_dict(), '128x_baseline.pth')
             lowest_validation_loss = average_validation_loss
