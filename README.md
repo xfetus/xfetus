@@ -77,7 +77,7 @@ git clone git@github.com:xfetus/xfetus.git
 }
 ```
 
-## Presentation
+## Presentations
 * [Good practices in AI/ML for Ultrasound Fetal Brain Imaging Synthesis](docs/event/README.md) for the deep learning and computer vision Journal Club on 1st of June 2023, 15:00 GMT.
 
 ## Contributors
