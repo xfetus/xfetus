@@ -14,15 +14,7 @@ uv pip list --verbose #check versions
 See further details [here](docs/dependencies).
 
 ## :school_satchel: Examples 
-See [examples](examples) path with further instructions to run notebooks for data curation, classification, and models.  
-
-## :octocat: Cloning repository
-* Generate your SSH keys as suggested [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (or [here](https://github.com/mxochicale/tools/blob/main/github/SSH.md))
-* Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine:
-```
-cd && mkdir -p $HOME/repositories/xfetus && cd  $HOME/repositories/xfetus
-git clone git@github.com:xfetus/xfetus.git
-```
+See [examples](docs/examples/) path with further instructions to run notebooks for data curation, classification, and models.  
 
 ## :scroll: Articles 
 > Iskandar, Michelle, Harvey Mannering, Zhanxiang Sun, Jacqueline Matthew, Hamideh Kerdegari, Laura Peralta, and Miguel Xochicale. **"Towards realistic ultrasound fetal brain imaging synthesis."** arXiv preprint arXiv:2304.03941 (2023). Published in Medical Imaging with Deep Learning, MIDL 2023 Short paper track. Nashville, TN, US  Jul 10 2023.
@@ -161,3 +153,11 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 
 This work follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  
 Contributions of any kind welcome!
+
+## :octocat: Cloning repository
+* Generate your SSH keys as suggested [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (or [here](https://github.com/mxochicale/tools/blob/main/github/SSH.md))
+* Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine:
+```
+cd && mkdir -p $HOME/repositories/xfetus && cd  $HOME/repositories/xfetus
+git clone git@github.com:xfetus/xfetus.git
+```
