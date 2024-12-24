@@ -1,14 +1,24 @@
 # Datasets
 
-## FETAL_PLANES_DB (2.1 GB): Common maternal-fetal ultrasound images
+## FETAL_PLANES_DB: Common maternal-fetal ultrasound images from Spain
+### Highlights
+* Common maternal-fetal ultrasound images from Spain (2.1 GB)
+* License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+* Total Images (patients): 12,400 images from 1,792 patients
+* Image Dimension [pixelx]: 692 x 480; 640 x 392; 768 x 519; 707 x 531; 745 x 559; 959 x 661; etc
+* Published June 23, 2020 | Version 1.0
+* Link [[zenodo]](https://zenodo.org/records/3904280); 
+* [article-scientific-reports](https://www.nature.com/articles/s41598-020-67076-5)
+* [[pre-print]](https://arxiv.org/abs/2209.09610)
+* [[google-scholar]]https://scholar.google.com/scholar?cites=2863764666513532768)
+
+### Overview
 A large dataset of routinely acquired maternal-fetal screening ultrasound images collected from two different hospitals by several operators and ultrasound machines. All images were manually labeled by an expert maternal fetal clinician. Images are divided into 6 classes: four of the most widely used fetal anatomical planes (Abdomen, Brain, Femur and Thorax), the mother’s cervix (widely used for prematurity screening) and a general category to include any other less common image plane. Fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular) to judge fine grain categorization performance. Meta information (patient number, us machine, operator) is also provided, as well as the training-test split used in the Nature Sci Rep paper.
 
 The research leading to these results has received funding from Transmural Biotech SL, "LaCaixa" Foundation under grant agreements LCF/PR/GN14/10270005 and LCF/PR/GN18/10310003 the Instituto de Salud Carlos III (PI16/00861, PI17/00675) within the Plan Nacional de I+D+I and cofinanced by ISCIII-Subdirección General de Evaluación together with the Fondo Europeo de Desarrollo Regional (FEDER) "Una manera de hacer Europa", Cerebra Foundation for the Brain Injured Child (Carmarthen, Wales, UK), Cellex Foundation and AGAUR under grant 2017 SGR nº 1531. Additionally, EE has received funding from the Departament de Salut under grant SLT008/18/00156. 
 
-The final dataset is comprised of over 12,400 images from 1,792 patients. https://zenodo.org/record/3904280
-
 If you find this dataset useful, please cite:
-
+```
     @article{Burgos-ArtizzuFetalPlanesDataset,
       title={Evaluation of deep convolutional neural networks for automatic classification of common maternal fetal ultrasound planes},
       author={Burgos-Artizzu, X.P. and Coronado-Gutiérrez, D. and Valenzuela-Alcaraz, B. and Bonet-Carne, E. and Eixarch, E. and Crispi, F. and Gratacós, E.},
@@ -18,8 +28,7 @@ If you find this dataset useful, please cite:
       doi="10.1038/s41598-020-67076-5",
       year={2020}
     } 
-[google-citations](https://scholar.google.com/scholar?cites=2863764666513532768)
-[article-scientific-reports](https://www.nature.com/articles/s41598-020-67076-5)
+```
 
 * Notes
 	* "Fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular) to judge fine grain categorization performance."
@@ -61,9 +70,19 @@ $ tree -fs
 1 directory, 12403 files
 ```
 
-## Maternal fetal ultrasound planes from low-resource imaging settings in five African countries (456 items, totalling 55.7 MB)
+## Maternal fetal ultrasound planes from low-resource imaging settings in five African countries
+### Highlights
+* Ultrasound planes from five African countries (456 items, totalling 55.7 MB)
+* License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+* Total Images: 456 items
+* Image Dimensions: 959 x 661 pixels
+* Published February 6, 2023 | Version v1.0
+* Link [[zenodo]](https://zenodo.org/record/7540448); 
+* [[pre-print]](https://arxiv.org/abs/2209.09610)
+* [[google-scholar]](https://scholar.google.com/scholar?cites=7480279748661179087)
+
+### Overview
 > This resource is a dataset of routinely acquired maternal-fetal screening ultrasound images collected in five centers of five countries in Africa (Malawi, Egypt, Uganda, Ghana and Algeria) that is associated to the journal article Sendra-Bacells et al. "Generalisability of fetal ultrasound deep learning models to low-resource imaging settings in five African countries", Scientific Reports. The images correspond to the four most common fetal planes: abdomen, brain, femur and thorax. A CSV file is provided where image filenames are associated to plane types and patient number as well as the partitioning in training and testing splits as used in the associated publication.
-[[zenodo]](https://zenodo.org/record/7540448); [[pre-print]](https://scholar.google.com/scholar?cites=7480279748661179087&as_sdt=2005&sciodt=0,5&hl=en); [[google-scholar]](https://scholar.google.com/scholar?cites=7480279748661179087)
 
 ![fig](SendraBalcells2023_fig1.png)
 ![fig](SendraBalcells2023_table1.png)
@@ -161,11 +180,16 @@ cp Uganda/*.png Images/
 
 
 ## Large-Scale Annotation Dataset for Fetal Head Biometry in Ultrasound Images
+### Highlights
 * Diverse Fetal Head Images-orginal-image.zip (2.4 GB)
 * License: Creative Commons Attribution 4.0 International (CC BY 4.0)
 * Total Images: 3,832
 * Image Dimensions: 959 x 661 pixels
+* Published March 21, 2023 | Version v2
 * Link https://zenodo.org/records/8265464
+
+## Overview
+> This dataset provides a comprehensive collection of ultrasound images focusing on fetal head biometry. It is designed to support the development and evaluation of image segmentation and biometric analysis algorithms in prenatal diagnostics. The images have been carefully annotated by experts in the field, ensuring high-quality data for researchers.
 
 Alzubaidi, Mahmood, Uzair Shah, Marco Agus, and Mowafa Househ. "FetSAM: Advanced Segmentation Techniques for Fetal Head Biometrics in Ultrasound Imagery." IEEE Open Journal of Engineering in Medicine and Biology (2024). 
 [article](https://ieeexplore.ieee.org/abstract/document/10480532/)

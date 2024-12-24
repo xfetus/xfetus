@@ -51,9 +51,11 @@
 **/*.blg
 **/*.out
 **/comment.cut
-
+**/*.npy
 
 # Distribution / packaging
 build/
 dist/
 *.egg-info/
+
+*.DS_Store
