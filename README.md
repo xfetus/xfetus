@@ -4,12 +4,20 @@
 xfetus is a Python-based library designed to synthesise fetal ultrasound images using state-of-the-art generative models, including GANs, transformers, diffusion models, and flow matching models. It also provides tools for assessing image synthesis quality through metrics such as FID, PSNR, SSIM, and Visual Turing Tests, along with access to relevant research publications.
 
 ## :nut_and_bolt: Installation
+### Install library
+```
+uv venv --python 3.12 # create uv VE
+pip install xfetus
+source .venv/bin/activate #activate VE
+```
+
+### Dev installation
 ```
 uv venv --python 3.12 # Create a virtual environment at .venv.
-source .venv/bin/activate #To activate the virtual environment:
-pip install xfetus #TOTEST
-uv pip install --editable . # Install the package in editable mode
+source .venv/bin/activate #To activate the virtual environment
+uv pip install -e ".[test,learning]" # Install the package in editable mode
 uv pip list --verbose #check versions
+pre-commit run -a #pre-commit hooks
 ```
 See further details [here](docs/dependencies).
 

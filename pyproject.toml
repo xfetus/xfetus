@@ -1,3 +1,65 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "xfetus"
+dynamic = ["version", "readme"]
+requires-python = ">=3.12" #python=3.12 local  #python3.10 apptainer
+keywords = ["artificial intelligence", "diffusion models"]
+authors = [
+  {name = "Miguel Xochicale", email = "add@email.com"},
+  {name = "Add co-author", email = "add@email.com"},
+]
+maintainers = [
+  {name = "Miguel Xochicale", email = "add@email.com"},
+  {name = "Add maintener", email = "add@email.com"}
+]
+description = "Python-based library for Synthesis of Ultrasound Fetal Imaging"
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Developers",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "opencv-python-headless",
+    "notebook",
+    "scikit-image",
+    "tqdm",
+    "wandb",
+    "pandas",
+    "PyQt6",
+    "loguru",
+    "scikit-learn",
+]
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pylint",
+    "black",
+    "isort",
+    "codespell",
+    "pre-commit"
+]
+learning = [
+    "torch",
+    "torchvision",
+    "einops",
+    "scikit-learn",
+    "diffusers",
+    "basicsr",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "xfetus.__version__"}
+readme = {file = ["README.md"]}
+
+[tool.setuptools.packages.find]
+where = ["src"]  # list of folders that contain the packages (["."] by default)
+include = ["xfetus"]  # package names should match these glob patterns (["*"] by default)
+exclude = ["data", "docs"]  # exclude packages matching these glob patterns (empty by default)
+namespaces = false  # to disable scanning PEP 420 namespaces (true by default)

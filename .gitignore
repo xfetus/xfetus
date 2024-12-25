@@ -19,7 +19,7 @@
 ## others
 **/*sr_gan_loss.csv
 
-## ignore datapaths 
+## ignore datapaths
 **/data/experiments
 
 ## temporal __pycache__/
