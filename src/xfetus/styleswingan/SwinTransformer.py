@@ -4,14 +4,16 @@
 # Github Repository: https://github.com/microsoft/StyleSwin
 
 
+from typing import Optional
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
-from xfetus.utils_nvidia.upfirdn2d import upfirdn2d
-import numpy as np
-from typing import Optional
+
 from xfetus.styleswingan.utils import EqualLinear
+from xfetus.utils_nvidia.upfirdn2d import upfirdn2d
 
 
 class AdaptiveInstanceNorm(nn.Module):
@@ -28,7 +30,7 @@ class AdaptiveInstanceNorm(nn.Module):
         out = gamma * out + beta
         return out
 
-    
+
 class SinusoidalPositionalEmbedding(nn.Module):
     """Sinusoidal Positional Embedding 1D or 2D (SPE/SPE2d).
     This module is a modified from:
@@ -374,7 +376,7 @@ class WindowAttention(nn.Module):
 
         attn = self.attn_drop(attn)
         x = (attn @ v).transpose(1, 2).reshape(B_, N, C)
-        
+
         return x
 
 
@@ -425,7 +427,7 @@ class SwinTransformerBlock(nn.Module):
                 dim // 2, window_size=to_2tuple(self.window_size), num_heads=num_heads // 2,
                 qk_scale=qk_scale, attn_drop=attn_drop),
         ])
-        
+
         attn_mask1 = None
         attn_mask2 = None
         if self.shift_size > 0:
@@ -451,7 +453,7 @@ class SwinTransformerBlock(nn.Module):
             attn_mask2 = mask_windows.unsqueeze(1) - mask_windows.unsqueeze(2)
             attn_mask2 = attn_mask2.masked_fill(
                 attn_mask2 != 0, float(-100.0)).masked_fill(attn_mask2 == 0, float(0.0))
-        
+
         self.register_buffer("attn_mask1", attn_mask1)
         self.register_buffer("attn_mask2", attn_mask2)
 
@@ -463,25 +465,25 @@ class SwinTransformerBlock(nn.Module):
         H, W = self.input_resolution
         B, L, C = x.shape
         assert L == H * W, "input feature has wrong size"
-        
+
         # Double Attn
         x = x.to('cuda')
         shortcut = x
         x = self.norm1(x.transpose(-1, -2), style).transpose(-1, -2)
-        
+
         qkv = self.qkv(x).reshape(B, -1, 3, C).permute(2, 0, 1, 3).reshape(3 * B, H, W, C)
         qkv_1 = qkv[:, :, :, : C // 2].reshape(3, B, H, W, C // 2)
         if self.shift_size > 0:
             qkv_2 = torch.roll(qkv[:, :, :, C // 2:], shifts=(-self.shift_size, -self.shift_size), dims=(1, 2)).reshape(3, B, H, W, C // 2)
         else:
             qkv_2 = qkv[:, :, :, C // 2:].reshape(3, B, H, W, C // 2)
-        
+
         q1_windows, k1_windows, v1_windows = self.get_window_qkv(qkv_1)
         q2_windows, k2_windows, v2_windows = self.get_window_qkv(qkv_2)
 
         x1 = self.attn[0](q1_windows, k1_windows, v1_windows, self.attn_mask1)
         x2 = self.attn[1](q2_windows, k2_windows, v2_windows, self.attn_mask2)
-        
+
         x1 = window_reverse(x1.view(-1, self.window_size * self.window_size, C // 2), self.window_size, H, W)
         x2 = window_reverse(x2.view(-1, self.window_size * self.window_size, C // 2), self.window_size, H, W)
 
@@ -498,7 +500,7 @@ class SwinTransformerBlock(nn.Module):
         x = x + self.mlp(self.norm2(x.transpose(-1, -2), style).transpose(-1, -2))
 
         return x
-    
+
     def get_window_qkv(self, qkv):
         q, k, v = qkv[0], qkv[1], qkv[2]   # B, H, W, C
         C = q.shape[-1]
@@ -572,7 +574,7 @@ class SwinTransformerLayer(nn.Module):
     """
 
     def __init__(self, dim, input_resolution, depth, num_heads, window_size, out_dim=None,
-                 mlp_ratio=4., qkv_bias=True, qk_scale=None, drop=0.0, attn_drop=0.0, upsample=None, 
+                 mlp_ratio=4., qkv_bias=True, qk_scale=None, drop=0.0, attn_drop=0.0, upsample=None,
                  use_checkpoint=False):
 
         super().__init__()

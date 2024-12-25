@@ -9,8 +9,9 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
+
 from xfetus.styleswingan.SwinTransformer import SwinTransformerLayer
-from xfetus.styleswingan.utils import Upsample, EqualLinear
+from xfetus.styleswingan.utils import EqualLinear, Upsample
 
 
 class ToIMG(nn.Module):
@@ -52,7 +53,7 @@ class Generator(nn.Module):
             EqualLinear(latent_dim, latent_dim, lr_mul=0.01, activation='fused_lrelu')
             for _ in range(8)
         ])
-        
+
         self.n_latent = 14
         self.input = ConstantInput(512)
         self.swinlayers = nn.ModuleList([
@@ -77,7 +78,7 @@ class Generator(nn.Module):
             SwinTransformerLayer(dim=32, input_resolution=(256, 256), depth=2,
                                  num_heads=4, window_size=8),
         ])
-        
+
         self.skip = nn.ModuleList([
             ToIMG(512),
             ToIMG(512),
@@ -87,7 +88,7 @@ class Generator(nn.Module):
             ToIMG(32),
             ToIMG(32, upsample=False),
         ])
-        
+
         # added additional Tanh layer at the end to
         # solve white spots on the generated images
         self.final_layer = nn.Sequential(
@@ -123,14 +124,14 @@ class Generator(nn.Module):
         x = self.input(latent)
         B, C, H, W = x.shape
         x = x.permute(0, 2, 3, 1).contiguous().view(B, H * W, C)
-        
+
         count = 0
         skip = None
-        
+
         for layer, to_img in zip(self.swinlayers, self.skip):
             x = layer(x, latent[:,count,:], latent[:,count+1,:])
             B, L, C = x.shape
             H = W = int(np.sqrt(L))
             skip = to_img(x.transpose(-1, -2).reshape(B, C, H, W), skip)
-        
+
         return self.final_layer(skip).to('cuda')

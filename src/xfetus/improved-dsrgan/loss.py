@@ -1,6 +1,6 @@
 import torch
-import torch.nn.functional as F
 import torch.nn as nn
+import torch.nn.functional as F
 from haar_pytorch import HaarForward
 
 """
@@ -13,7 +13,7 @@ where
     Lsimple = MSE loss between predicted and actual noise
     Lvlb    = Loss outlined in "Improved Denoising Diffusion Probabilistic Models" paper [2]
     Limg    = Pairwise similarity between baseline and finetuned images
-    Lhf     = Pairwise similarity between high frequency Haar wavelet features of baseline and finetuned images 
+    Lhf     = Pairwise similarity between high frequency Haar wavelet features of baseline and finetuned images
     Lhfmse  = MSE loss between high frequency Haar wavelet features of baseline and finetuned images
     λ1...4  = Scalar weightings, see [1] for exact values
 
@@ -24,11 +24,11 @@ References:
 
 def predict_x_0(noise_pred, noisy_image, alphas_cumprod, timesteps):
     """
-    Given a noisy image and the predicted noise component of that image we will make a prediction 
+    Given a noisy image and the predicted noise component of that image we will make a prediction
     for the clean, un-noised image using:
 
       x₀ = (1/√(αₜ)) * xₜ − (√(1 − αₜ) / √(αₜ)) * ε₀(xₜ, t)
-    
+
     """
     a_bar = alphas_cumprod[timesteps]
     x_0_pred = (
@@ -51,7 +51,7 @@ def kl_divergence(p, q):
 def loss_img(noise_pred_ada, noise_pred_sou, noisy_images, alphas_cumprod, timesteps):
     """
     Pairwise similarity loss for generated images:
-     
+
         sum_over_i( Dₖₗ( pᵢᵃᵈᵃ || pᵢˢᵒᵘ ) )
 
     """
@@ -94,7 +94,7 @@ def loss_img(noise_pred_ada, noise_pred_sou, noisy_images, alphas_cumprod, times
 def loss_hf(noise_pred_ada, noise_pred_sou, noisy_images, alphas_cumprod, timesteps):
     """
     Pairwise similarity loss for high frequency components of Haar wavelet:
-     
+
         sum_over_i( Dₖₗ( pfᵢᵃᵈᵃ || pfᵢˢᵒᵘ ) )
 
     """

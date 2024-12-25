@@ -1,8 +1,9 @@
 import os
 
-from torch.utils.data import Dataset
-import torch
 import numpy as np
+import torch
+from torch.utils.data import Dataset
+
 
 class PrecomputedFetalPlaneDataset(Dataset):
     """Fetal Plane dataset."""
@@ -26,6 +27,5 @@ class PrecomputedFetalPlaneDataset(Dataset):
                 else:
                     array_idx = idx - self.cumulative_lengths[i - 1]
                 return torch.from_numpy(self.data[i][array_idx]), i
-        
-        raise IndexError("Index out of range")
 
+        raise IndexError("Index out of range")

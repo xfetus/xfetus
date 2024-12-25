@@ -1,17 +1,17 @@
 import argparse
 import os
 
-from skimage import io
-from skimage.transform import resize
 import cv2
 import numpy as np
 import pandas as pd
+from skimage import io
+from skimage.transform import resize
 from torchvision import transforms
 
 if __name__ == "__main__":
     """
     Script to create numpy arrays with train and validation datasets per label
-    
+
     python precompute_dataset.py -d $HOME/datasets/FETAL_PLANES_DB_2020/
     """
     # Command line aurgments - for script
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         for index, row in train_metadata.iterrows():
           if count >= train_dataset_size:
             break
-          
+
           # Load image from dataset
           img_file_name = os.path.join(images_path, row['Image_name'] + '.png')
           image = io.imread(img_file_name)
@@ -83,7 +83,7 @@ if __name__ == "__main__":
       #TODO add path to save MODEL_DEV
       np.save(p + ' train.npy', train_dataset)
 
-      # Get the test data 
+      # Get the test data
       validation_metadata = plane_metadata[plane_metadata['Train '] == 0]
       print(len(validation_metadata))
 
@@ -104,7 +104,7 @@ if __name__ == "__main__":
           # Load image from dataset
           img_file_name = os.path.join(images_path, row['Image_name'] + '.png')
           image = io.imread(img_file_name)
-          
+
           # Preprocess and augment the image
           image = transform_operations(image)
           small_image = cv2.resize(image[0,...].cpu().detach().numpy(), dsize=(image_size, image_size), interpolation=cv2.INTER_CUBIC)

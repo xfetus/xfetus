@@ -1,26 +1,24 @@
+import argparse
 import math
+import os
+import random
+from collections import OrderedDict
+from os import path as osp
+
 import torch
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
+import yaml
+from basicsr.archs.arch_util import to_2tuple, trunc_normal_
+from basicsr.metrics import calculate_metric
+from basicsr.models.sr_model import SRModel
+from basicsr.utils import imwrite, set_random_seed, tensor2img
+from basicsr.utils.dist_util import get_dist_info, init_dist, master_only
+from basicsr.utils.options import _postprocess_yml_value, dict2str
+from basicsr.utils.registry import ARCH_REGISTRY, MODEL_REGISTRY
+from einops import rearrange
 from torch.nn import functional as F
 from tqdm import tqdm
-from os import path as osp
-import argparse
-import os
-import random
-import yaml
-from collections import OrderedDict
-from einops import rearrange
-
-from basicsr.utils.registry import MODEL_REGISTRY
-from basicsr.models.sr_model import SRModel
-from basicsr.metrics import calculate_metric
-from basicsr.utils import imwrite, tensor2img
-from basicsr.utils.registry import ARCH_REGISTRY
-from basicsr.archs.arch_util import to_2tuple, trunc_normal_
-from basicsr.utils.options import dict2str, _postprocess_yml_value
-from basicsr.utils import set_random_seed
-from basicsr.utils.dist_util import get_dist_info, init_dist, master_only
 
 
 def drop_path(x, drop_prob: float = 0., training: bool = False):
@@ -965,7 +963,7 @@ class HAT(nn.Module):
     def forward_features(self, x):
         x_size = (x.shape[2], x.shape[3])
 
-        # Calculate attention mask and relative position index in advance to speed up inference. 
+        # Calculate attention mask and relative position index in advance to speed up inference.
         # The original code is very time-cosuming for large window size.
         attn_mask = self.calculate_mask(x_size).to(x.device)
         params = {'attn_mask': attn_mask, 'rpi_sa': self.relative_position_index_SA, 'rpi_oca': self.relative_position_index_OCA}

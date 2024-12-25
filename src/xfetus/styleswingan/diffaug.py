@@ -138,6 +138,3 @@ def CR_DiffAug(x, flip=True, translation=True, color=True, cutout=True):
     if flip or translation:
         x = x.contiguous()
     return x
-
-
-

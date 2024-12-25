@@ -5,11 +5,10 @@ import os
 
 import torch
 from torch import nn
-from torch.nn import functional as F
 from torch.autograd import Function
+from torch.cuda.amp import custom_bwd, custom_fwd
+from torch.nn import functional as F
 from torch.utils.cpp_extension import load
-
-from torch.cuda.amp import custom_fwd, custom_bwd
 
 module_path = os.path.dirname(__file__)
 fused = load(

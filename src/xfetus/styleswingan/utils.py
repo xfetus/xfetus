@@ -5,11 +5,14 @@
 
 
 import math
+
 import torch
 from torch import nn
 from torch.nn import functional as F
-from xfetus.utils_nvidia.upfirdn2d import upfirdn2d
+
 from xfetus.utils_nvidia.fused_act import *
+from xfetus.utils_nvidia.upfirdn2d import upfirdn2d
+
 
 class Blur(nn.Module):
     def __init__(self, kernel, pad, upsample_factor=1):
@@ -62,7 +65,7 @@ class Downsample(nn.Module):
         out = upfirdn2d(input, self.kernel, up=1, down=self.factor, pad=self.pad)
         return out
 
-    
+
 class EqualConv2d(nn.Module):
     def __init__(
         self, in_channel, out_channel, kernel_size, stride=1, padding=0, bias=True
@@ -94,7 +97,7 @@ class EqualConv2d(nn.Module):
 
         return out
 
-    
+
 class EqualLinear(nn.Module):
     def __init__(
         self, in_dim, out_dim, bias=True, bias_init=0, lr_mul=1, activation=None

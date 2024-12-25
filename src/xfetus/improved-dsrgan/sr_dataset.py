@@ -1,19 +1,20 @@
 import os
 
-from torch.utils.data import Dataset
+import cv2
+import numpy as np
 import pandas as pd
 from skimage import io
 from skimage.transform import resize
-import cv2
-import numpy as np
+from torch.utils.data import Dataset
+
 
 class FetalPlaneDataset(Dataset):
     """Fetal Plane dataset."""
 
-    def __init__(self, root_dir, csv_file, plane, 
-                 brain_plane=None, 
-                 us_machine=None, 
-                 operator_number=None, 
+    def __init__(self, root_dir, csv_file, plane,
+                 brain_plane=None,
+                 us_machine=None,
+                 operator_number=None,
                  transform=None,
                  train=None,
                  validation=False,
@@ -30,7 +31,7 @@ class FetalPlaneDataset(Dataset):
             transform: Transformation that will be applied to all images
             size: dimension of the image (one number because images will be square)
 
-            
+
         return image
         """
 
@@ -63,7 +64,7 @@ class FetalPlaneDataset(Dataset):
         img_file_name = os.path.join(self.root_dir,
                                 self.csv_file.iloc[idx, 0] + '.png')
         image = io.imread(img_file_name)
-        
+
         # Preprocess and augment the image
         if self.transform:
             image = self.transform(image)

@@ -1,30 +1,30 @@
-from os import path as osp
-import random
-
-from tqdm import tqdm
-import torch
-from torchvision import transforms
-from torch.utils.data import DataLoader
 import argparse
-import wandb
-from diffusers import DDIMScheduler, DDPMPipeline
-import torch.nn.functional as F
-import numpy as np
-import matplotlib.pyplot as plt
 import logging
+import random
+from os import path as osp
+
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.nn.functional as F
+import wandb
 from basicsr.data import build_dataloader, build_dataset
 from basicsr.models import build_model
-from basicsr.utils import get_env_info, get_root_logger, get_time_str, make_exp_dirs
+from basicsr.utils import (get_env_info, get_root_logger, get_time_str,
+                           make_exp_dirs)
 from basicsr.utils.options import dict2str
-
-from sr_dataset import FetalPlaneDataset
+from diffusers import DDIMScheduler, DDPMPipeline
 from hat_utils import parse_options
+from sr_dataset import FetalPlaneDataset
+from torch.utils.data import DataLoader
+from torchvision import transforms
+from tqdm import tqdm
 
 if __name__ == "__main__":
     """
     Script to train baseline model with HAT model
 
-    python train_baseline_hat.py -d 
+    python train_baseline_hat.py -d
     """
 
     ##################
@@ -75,17 +75,17 @@ if __name__ == "__main__":
     random.seed(manualSeed)
     torch.manual_seed(manualSeed)
 
-    # Filter dataset 
+    # Filter dataset
     plane = None # 'Fetal brain', 'Fetal thorax', 'Maternal cervix', 'Fetal femur', 'Fetal thorax', 'Other'
     operator_number = None # 'Op. 1', 'Op. 2', 'Op. 3', 'Other'
     us_machine = 'Voluson E6' # None, 'Voluson S10'
-    brain_plane = None # 'Trans-cerebellum', 'Trans-thalamic', 'Trans-ventricular'   
+    brain_plane = None # 'Trans-cerebellum', 'Trans-thalamic', 'Trans-ventricular'
 
     # Define hyperparameters
     image_size = 512
     batch_size = 1
     epochs = 300
-    learning_rate = 1e-5  
+    learning_rate = 1e-5
 
     ####################
     ##   2. DATASET   ##
@@ -107,13 +107,13 @@ if __name__ == "__main__":
                             brain_plane=None,
                             us_machine='Voluson E6',
                             operator_number=None,
-                            transform=transform_operations,  
+                            transform=transform_operations,
                             train=1,
                             validation=False,
                             size=image_size,
                         )
     # Define corresponding dataloader
-    training_dataloader = DataLoader(training_dataset, 
+    training_dataloader = DataLoader(training_dataset,
                         batch_size=batch_size,
                         shuffle=True)
 
@@ -123,16 +123,16 @@ if __name__ == "__main__":
                             brain_plane=None,
                             us_machine='Voluson E6',
                             operator_number=None,
-                            transform=transform_operations,  
+                            transform=transform_operations,
                             train=0,
                             validation=True,
                             size=image_size,
                         )
     # Define corresponding dataloader
-    validation_dataloader = DataLoader(validation_dataset, 
+    validation_dataloader = DataLoader(validation_dataset,
                         batch_size=batch_size,
                         shuffle=True)
-    
+
     ##############################
     ##   3. MODEL & OPTIMIZER   ##
     ##############################
@@ -214,7 +214,7 @@ if __name__ == "__main__":
             plt.show()
             plt.imshow(output)
             plt.show()
-        
+
         print("Epoch " + str(e) + ", Avg Loss: " + str(sum(losses) / len(losses)))
         print("Epoch " + str(e) + ", Avg Validation Loss: " + str(sum(validation_losses) / len(validation_losses)))
 

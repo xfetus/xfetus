@@ -1,21 +1,20 @@
+import argparse
+import copy
 from os import path as osp
 
-from tqdm import tqdm
-import torch
-from torchvision import transforms
-from torch.utils.data import DataLoader
-import argparse
-import wandb
-from diffusers import DDIMScheduler, DDPMPipeline
-import torch.nn.functional as F
-import numpy as np
-import torch.nn as nn
 import matplotlib.pyplot as plt
-import copy
-from haar_pytorch import HaarForward, HaarInverse
-
-from loss import loss_img, loss_hf, loss_hfmse
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import wandb
 from ddpm_dataset import PrecomputedFetalPlaneDataset
+from diffusers import DDIMScheduler, DDPMPipeline
+from haar_pytorch import HaarForward, HaarInverse
+from loss import loss_hf, loss_hfmse, loss_img
+from torch.utils.data import DataLoader
+from torchvision import transforms
+from tqdm import tqdm
 
 if __name__ == "__main__":
 
@@ -65,7 +64,7 @@ if __name__ == "__main__":
     ####################
     ##   2. DATASET   ##
     ####################
-    
+
     # define filenames for training data (saved as several numpy arrays)
     training_filenames = [
         'Fetal abdomen train.npy',
@@ -127,7 +126,7 @@ if __name__ == "__main__":
         image_pipe_baseline = copy.deepcopy(image_pipe)
         for param in image_pipe_baseline.unet.parameters():
             param.requires_grad = False
-    
+
     lowest_validation_loss = 10
 
     #####################
@@ -139,7 +138,7 @@ if __name__ == "__main__":
         for step, batch in tqdm(enumerate(train_loader), total=len(train_loader)):
             # Sample an image from dataset and make it a three channel (RGB) image
             clean_images, class_labels = batch
-            clean_images = torch.unsqueeze(clean_images, 1) 
+            clean_images = torch.unsqueeze(clean_images, 1)
             clean_images = torch.cat((clean_images, clean_images, clean_images), dim=1)
 
             # Move data to whatever device we are using
@@ -172,31 +171,31 @@ if __name__ == "__main__":
 
                 # Get the model prediction for the noise
                 noise_pred_src = image_pipe_baseline.unet(noisy_images.float(), timesteps, class_labels, return_dict=False)[0]
-              
+
                 # Limg
                 loss += lambdas[1] * loss_img(
-                    noise_pred, 
+                    noise_pred,
                     noise_pred_src,
-                    noisy_images.float(), 
-                    image_pipe.scheduler.alphas_cumprod.to(device), 
+                    noisy_images.float(),
+                    image_pipe.scheduler.alphas_cumprod.to(device),
                     timesteps
                 )
 
                 # Lhf
                 loss += lambdas[2] * loss_hf(
-                    noise_pred, 
+                    noise_pred,
                     noise_pred_src,
-                    noisy_images.float(), 
-                    image_pipe.scheduler.alphas_cumprod.to(device), 
+                    noisy_images.float(),
+                    image_pipe.scheduler.alphas_cumprod.to(device),
                     timesteps
                 )
 
                 # Lhfmse
                 loss += lambdas[3] * loss_hfmse(
-                    noise_pred, 
+                    noise_pred,
                     noise_pred_src,
-                    noisy_images.float(), 
-                    image_pipe.scheduler.alphas_cumprod.to(device), 
+                    noisy_images.float(),
+                    image_pipe.scheduler.alphas_cumprod.to(device),
                     timesteps
                 )
 
@@ -208,7 +207,7 @@ if __name__ == "__main__":
             if (step + 1) % grad_accumulation_steps == 0:
                 optimizer.step()
                 optimizer.zero_grad()
-        
+
         # Output the average loss for a given epoch
         average_epoch_loss = sum(losses) / len(losses)
 
@@ -221,7 +220,7 @@ if __name__ == "__main__":
         for step, batch in tqdm(enumerate(validation_loader), total=len(validation_loader)):
             # Sample an image from dataset and make it a three channel (RGB) image
             clean_images, class_labels = batch
-            clean_images = torch.unsqueeze(clean_images, 1) 
+            clean_images = torch.unsqueeze(clean_images, 1)
             clean_images = torch.cat((clean_images, clean_images, clean_images), dim=1)
 
             # Move data to whatever device we are using
@@ -252,31 +251,31 @@ if __name__ == "__main__":
 
                 # Get the model prediction for the noise
                 noise_pred_src = image_pipe_baseline.unet(noisy_images.float(), timesteps, class_labels, return_dict=False)[0]
-              
+
                 # Limg
                 loss += lambdas[1] * loss_img(
-                    noise_pred, 
+                    noise_pred,
                     noise_pred_src,
-                    noisy_images.float(), 
-                    image_pipe.scheduler.alphas_cumprod.to(device), 
+                    noisy_images.float(),
+                    image_pipe.scheduler.alphas_cumprod.to(device),
                     timesteps
                 )
 
                 # Lhf
                 loss += lambdas[2] * loss_hf(
-                    noise_pred, 
+                    noise_pred,
                     noise_pred_src,
-                    noisy_images.float(), 
-                    image_pipe.scheduler.alphas_cumprod.to(device), 
+                    noisy_images.float(),
+                    image_pipe.scheduler.alphas_cumprod.to(device),
                     timesteps
                 )
 
                 # Lhfmse
                 loss += lambdas[3] * loss_hfmse(
-                    noise_pred, 
+                    noise_pred,
                     noise_pred_src,
-                    noisy_images.float(), 
-                    image_pipe.scheduler.alphas_cumprod.to(device), 
+                    noisy_images.float(),
+                    image_pipe.scheduler.alphas_cumprod.to(device),
                     timesteps
                 )
 
@@ -308,16 +307,16 @@ if __name__ == "__main__":
             for i, t in tqdm(enumerate(image_pipe.scheduler.timesteps)):
                 model_input = image_pipe.scheduler.scale_model_input(x, t)
                 with torch.no_grad():
-                    # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar 
+                    # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar
                     # with what these images look like
                     class_label = torch.ones(1, dtype=torch.int64)
                     noise_pred = image_pipe.unet(model_input, t, class_label.to(device))["sample"]
 
                 x = image_pipe.scheduler.step(noise_pred, t, x).prev_sample
-                
+
             # Convert final image to numpy
             validation_img = np.transpose(x[0,...].detach().cpu().numpy(), (1,2,0))
-            
+
             # Log outputs on www.wandb.ai
             if wandb_enabled:
                 images = wandb.Image(validation_img, caption="Epoch " + str(e))
@@ -334,4 +333,3 @@ if __name__ == "__main__":
         if lowest_validation_loss > average_validation_loss:
             torch.save(image_pipe.unet.state_dict(), '128xft_ddpm-pa.pth')
             lowest_validation_loss = average_validation_loss
-    

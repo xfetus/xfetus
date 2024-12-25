@@ -8,9 +8,11 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
-from xfetus.styleswingan.utils import Downsample, Blur, EqualConv2d, EqualLinear
-from xfetus.utils_nvidia.upfirdn2d import upfirdn2d
+
+from xfetus.styleswingan.utils import (Blur, Downsample, EqualConv2d,
+                                       EqualLinear)
 from xfetus.utils_nvidia.fused_act import FusedLeakyReLU
+from xfetus.utils_nvidia.upfirdn2d import upfirdn2d
 
 
 def get_haar_wavelet(in_channels):
@@ -22,7 +24,7 @@ def get_haar_wavelet(in_channels):
     haar_wav_lh = haar_wav_h.T * haar_wav_l
     haar_wav_hl = haar_wav_l.T * haar_wav_h
     haar_wav_hh = haar_wav_h.T * haar_wav_h
-    
+
     return haar_wav_ll, haar_wav_lh, haar_wav_hl, haar_wav_hh
 
 
@@ -64,7 +66,7 @@ class InverseHaarTransform(nn.Module):
         hh = upfirdn2d(hh, self.hh, up=2, pad=(1, 0, 1, 0))
 
         return ll + lh + hl + hh
-    
+
 
 class FromRGB(nn.Module):
     def __init__(self, out_channel, downsample=True, blur_kernel=[1, 3, 3, 1]):
@@ -133,7 +135,7 @@ class Discriminator(nn.Module):
             DiscBlock(512, 512),
             DiscBlock(512, 512),
         ])
-        
+
         self.skip = nn.ModuleList([
             FromRGB(256, downsample=False), # 256
             FromRGB(512),

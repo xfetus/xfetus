@@ -1,18 +1,17 @@
+import argparse
 from os import path as osp
 
-from tqdm import tqdm
-import torch
-from torchvision import transforms
-from torch.utils.data import DataLoader
-import argparse
-import wandb
-from diffusers import DDIMScheduler, DDPMPipeline
-import torch.nn.functional as F
-import numpy as np
-import torch.nn as nn
 import matplotlib.pyplot as plt
-
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import wandb
 from ddpm_dataset import PrecomputedFetalPlaneDataset
+from diffusers import DDIMScheduler, DDPMPipeline
+from torch.utils.data import DataLoader
+from torchvision import transforms
+from tqdm import tqdm
 
 if __name__ == "__main__":
     """
@@ -66,7 +65,7 @@ if __name__ == "__main__":
     ####################
     ##   2. DATASET   ##
     ####################
-    
+
     # define filenames for training data (saved as several numpy arrays)
     training_filenames = [
         'Fetal abdomen train.npy',
@@ -145,7 +144,7 @@ if __name__ == "__main__":
         for step, batch in tqdm(enumerate(train_loader), total=len(train_loader)):
             # Sample an image from dataset and make it a three channel (RGB) image
             clean_images, class_labels = batch
-            clean_images = torch.unsqueeze(clean_images, 1) 
+            clean_images = torch.unsqueeze(clean_images, 1)
             clean_images = torch.cat((clean_images, clean_images, clean_images), dim=1)
 
             # Move data to whatever device we are using
@@ -183,7 +182,7 @@ if __name__ == "__main__":
             if (step + 1) % grad_accumulation_steps == 0:
                 optimizer.step()
                 optimizer.zero_grad()
-        
+
         # Output the average loss for a given epoch
         average_epoch_loss = sum(losses)/len(losses)
 
@@ -195,7 +194,7 @@ if __name__ == "__main__":
         for step, batch in tqdm(enumerate(validation_loader), total=len(validation_loader)):
             # Sample an image from dataset and make it a three channel (RGB) image
             clean_images, class_labels = batch
-            clean_images = torch.unsqueeze(clean_images, 1) 
+            clean_images = torch.unsqueeze(clean_images, 1)
             clean_images = torch.cat((clean_images, clean_images, clean_images), dim=1)
 
             # Move data to whatever device we are using
@@ -252,17 +251,17 @@ if __name__ == "__main__":
                 model_input = scheduler.scale_model_input(x, t)
                 with torch.no_grad():
                     if add_conditioning:
-                        # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar 
+                        # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar
                         # with what these images look like
                         class_label = torch.ones(1, dtype=torch.int64)
                         noise_pred = image_pipe.unet(model_input, t, class_label.to(device))["sample"]
                     else:
                         noise_pred = image_pipe.unet(model_input, t)["sample"]
                 x = scheduler.step(noise_pred, t, x).prev_sample
-                
+
             # Convert final image to numpy
             validation_img = np.transpose(x[0,...].detach().cpu().numpy(), (1,2,0))
-            
+
             # Log outputs on www.wandb.ai
             if wandb_enabled:
                 images = wandb.Image(validation_img, caption="Epoch " + str(e))
@@ -280,5 +279,3 @@ if __name__ == "__main__":
         if lowest_validation_loss > average_validation_loss:
             torch.save(image_pipe.unet.state_dict(), '128x_baseline.pth')
             lowest_validation_loss = average_validation_loss
-
-    

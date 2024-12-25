@@ -1,10 +1,11 @@
 import os
-import numpy as np
-from PIL import Image
+
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
+from PIL import Image
 from torch.utils.data import Dataset
-from torchvision.transforms import (Compose, Resize, ToTensor, Normalize)
+from torchvision.transforms import Compose, Normalize, Resize, ToTensor
 
 
 class ImageDataset(Dataset):

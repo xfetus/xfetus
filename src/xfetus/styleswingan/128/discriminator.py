@@ -1,10 +1,10 @@
 import numpy as np
 import torch
+from model.utils import Blur, Downsample, EqualConv2d, EqualLinear
 from torch import nn
 from torch.nn import functional as F
-from model.utils import Downsample, Blur, EqualConv2d, EqualLinear
-from utils_nvidia.upfirdn2d import upfirdn2d
 from utils_nvidia.fused_act import FusedLeakyReLU
+from utils_nvidia.upfirdn2d import upfirdn2d
 
 
 def get_haar_wavelet(in_channels):
@@ -16,7 +16,7 @@ def get_haar_wavelet(in_channels):
     haar_wav_lh = haar_wav_h.T * haar_wav_l
     haar_wav_hl = haar_wav_l.T * haar_wav_h
     haar_wav_hh = haar_wav_h.T * haar_wav_h
-    
+
     return haar_wav_ll, haar_wav_lh, haar_wav_hl, haar_wav_hh
 
 
@@ -58,7 +58,7 @@ class InverseHaarTransform(nn.Module):
         hh = upfirdn2d(hh, self.hh, up=2, pad=(1, 0, 1, 0))
 
         return ll + lh + hl + hh
-    
+
 
 class FromRGB(nn.Module):
     def __init__(self, out_channel, downsample=True, blur_kernel=[1, 3, 3, 1]):

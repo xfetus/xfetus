@@ -1,10 +1,11 @@
-from torchmetrics.image.fid import FrechetInceptionDistance
-import torch
-from diffusers import DDPMPipeline
-import numpy as np
-import torch.nn as nn
-from tqdm import tqdm
 import argparse
+
+import numpy as np
+import torch
+import torch.nn as nn
+from diffusers import DDPMPipeline
+from torchmetrics.image.fid import FrechetInceptionDistance
+from tqdm import tqdm
 
 if __name__ == "__main__":
 
@@ -53,9 +54,9 @@ if __name__ == "__main__":
     real_images = torch.stack([real_images, real_images, real_images], dim=1)
     real_images = torch.clip(real_images, -0.5, 0.5)
     real_tensor = ((real_images + 0.5) * 255).byte()
-    
+
     # Generate fake images
-    print("Generate fake images") 
+    print("Generate fake images")
     fake_images = np.zeros((total_images, 3, int(image_size), int(image_size)))
     for img_idx in range(0, total_images, batch_size):
         x = torch.randn(batch_size, 3, int(image_size), int(image_size)).to(device) # noise
@@ -63,7 +64,7 @@ if __name__ == "__main__":
             model_input = image_pipe.scheduler.scale_model_input(x, t)
             with torch.no_grad():
                 if add_conditioning:
-                    # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar 
+                    # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar
                     # with what these images look like
                     class_label = torch.ones(1, dtype=torch.int64)
                     noise_pred = image_pipe.unet(model_input, t, class_label.to(device))["sample"]
@@ -76,8 +77,8 @@ if __name__ == "__main__":
     fake_tensor = torch.clip(fake_tensor, -0.5, 0.5)
     fake_tensor = ((fake_tensor + 0.5) * 255).byte()
 
-    #  Calcuate the FID score 
-    fid.update(real_tensor.to(device), real=True)        
+    #  Calcuate the FID score
+    fid.update(real_tensor.to(device), real=True)
     fid.update(fake_tensor.to(device), real=False)
     current_fid = fid.compute().item()
     print("FID Score: ", current_fid)
@@ -86,6 +87,3 @@ if __name__ == "__main__":
 
     # Save images
     np.save('fake_images.npy', fake_images)
-
-
-

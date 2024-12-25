@@ -1,9 +1,9 @@
 import numpy as np
 import torch
+from model.SwinTransformer import SwinTransformerLayer
+from model.utils import EqualLinear, Upsample
 from torch import nn
 from torch.nn import functional as F
-from model.SwinTransformer import SwinTransformerLayer
-from model.utils import Upsample, EqualLinear
 
 
 class ToIMG(nn.Module):
@@ -76,7 +76,7 @@ class Generator(nn.Module):
             ToIMG(32),
             ToIMG(32, upsample=False),
         ])
-        
+
         self.final_layer = nn.Sequential(
             nn.Tanh()
         )
@@ -96,7 +96,7 @@ class Generator(nn.Module):
             nn.init.xavier_normal_(m.weight, gain=.02)
             if hasattr(m, 'bias') and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
-            
+
     def pixel_norm(self, z):
         return z * torch.rsqrt(torch.mean(z ** 2, dim=1, keepdim=True) + 1e-8)
 
@@ -110,14 +110,14 @@ class Generator(nn.Module):
         x = self.input(latent)
         B, C, H, W = x.shape
         x = x.permute(0, 2, 3, 1).contiguous().view(B, H * W, C)
-        
+
         count = 0
         skip = None
-        
+
         for layer, to_img in zip(self.swinlayers, self.skip):
             x = layer(x, latent[:,count,:], latent[:,count+1,:])
             B, L, C = x.shape
             H = W = int(np.sqrt(L))
             skip = to_img(x.transpose(-1, -2).reshape(B, C, H, W), skip)
-        
+
         return self.final_layer(skip).to('cuda')
