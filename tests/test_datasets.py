@@ -1,8 +1,10 @@
 import os
 from pathlib import Path
-from loguru import logger
+
 import yaml
+from loguru import logger
 from torchvision import transforms
+
 from xfetus.utils.datasets import AfricanFetalPlaneDataset
 
 file=Path().absolute()/"tests/config_test.yml"
@@ -18,7 +20,7 @@ def test_data_path():
     TODO:
     https://github.com/ashleve/lightning-hydra-template/blob/main/tests/conftest.py
     """
-    DATASET_PATH = os.path.join(str(Path.home()), config_yaml["ABS_DATA_PATH"])
+    DATASET_PATH = os.path.join(str(Path.home()), config_yaml["AFRICAN_DATA_PATH"])
 
     DATABASE_CSV=DATASET_PATH+"/African_planes_database.csv"
     image_size = 224
@@ -49,4 +51,3 @@ def test_data_path():
 
     assert len(african_train_dataset) == 217
     assert len(african_val_dataset) == 233
-

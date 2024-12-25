@@ -1,7 +1,9 @@
 import time
-import torch
+
 import matplotlib.pyplot as plt
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support, ConfusionMatrixDisplay
+import torch
+from sklearn.metrics import (ConfusionMatrixDisplay, accuracy_score,
+                             precision_recall_fscore_support)
 
 
 def save_model(model, optimizer, epoch, best_epoch, train_losses, val_losses, save_path):
@@ -33,15 +35,15 @@ def load_model(model_path, device, model=None, optimizer=None):
 
   return epoch, best_epoch, model, optimizer, train_losses, val_losses
 
-def train_model(train_dataloader, 
-                val_dataloader, 
-                model, 
+def train_model(train_dataloader,
+                val_dataloader,
+                model,
                 optimizer,
                 criterion,
-                num_epochs, 
-                model_save_path, 
-                checkpoint_save_path, 
-                device, 
+                num_epochs,
+                model_save_path,
+                checkpoint_save_path,
+                device,
                 load_checkpoint=False):
   start = time.time()
   train_losses = []
