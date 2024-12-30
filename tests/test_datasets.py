@@ -47,7 +47,7 @@ def test_data_path():
                                                split_type="csv",
                                                split="valid")
 
-    logger.info(f" Lenght of trainset={len(african_train_dataset)} and valset={len(african_val_dataset)}")
+    logger.info(f" Length of trainset={len(african_train_dataset)} and valset={len(african_val_dataset)}")
 
     assert len(african_train_dataset) == 217
     assert len(african_val_dataset) == 233

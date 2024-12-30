@@ -96,7 +96,7 @@ if __name__ == "__main__":
         for index, row in validation_metadata.iterrows():
           if count >= validation_dataset_size:
             break
-          # Validation set only contain even indexes, this effec tivly splits the test part of the
+          # Validation set only contain even indexes, this effect tivly splits the test part of the
           # dataset 50/50 validation/test.
           elif index % 2 == 0:
             continue

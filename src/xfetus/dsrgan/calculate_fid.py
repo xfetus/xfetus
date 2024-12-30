@@ -64,7 +64,7 @@ if __name__ == "__main__":
             model_input = image_pipe.scheduler.scale_model_input(x, t)
             with torch.no_grad():
                 if add_conditioning:
-                    # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar
+                    # Conditiong on the 'Fetal brain' class (with index 1) because I am most familiar
                     # with what these images look like
                     class_label = torch.ones(1, dtype=torch.int64)
                     noise_pred = image_pipe.unet(model_input, t, class_label.to(device))["sample"]
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     fake_tensor = torch.clip(fake_tensor, -0.5, 0.5)
     fake_tensor = ((fake_tensor + 0.5) * 255).byte()
 
-    #  Calcuate the FID score
+    #  Calculate the FID score
     fid.update(real_tensor.to(device), real=True)
     fid.update(fake_tensor.to(device), real=False)
     current_fid = fid.compute().item()

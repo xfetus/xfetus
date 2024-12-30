@@ -137,7 +137,7 @@ if __name__ == "__main__":
     ##   3. MODEL & OPTIMIZER   ##
     ##############################
 
-    # parse options, set distributed setting, set ramdom seed
+    # parse options, set distributed setting, set random seed
     opt = parse_options(hat_config_path, is_train=False)
     opt['path']['pretrain_network_g'] = hat_checkpoint_path
     torch.backends.cudnn.benchmark = True

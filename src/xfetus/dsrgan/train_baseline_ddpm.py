@@ -251,7 +251,7 @@ if __name__ == "__main__":
                 model_input = scheduler.scale_model_input(x, t)
                 with torch.no_grad():
                     if add_conditioning:
-                        # Conditiong on the 'Fetal brain' class (with index 1) because I am most familar
+                        # Conditiong on the 'Fetal brain' class (with index 1) because I am most familiar
                         # with what these images look like
                         class_label = torch.ones(1, dtype=torch.int64)
                         noise_pred = image_pipe.unet(model_input, t, class_label.to(device))["sample"]
