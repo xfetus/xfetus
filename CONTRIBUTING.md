@@ -51,21 +51,28 @@ git push origin ISSUENUMBER-branch-name
 1. Select branch that contain your commits.
 2. Click `Compare and pull request` and create PR for the associated branch.
 3. Type a title and description of your PR and create PR
-4. Please keep your PR in sync with the base branch.
+4. Please keep your PR in sync with the base branch (e.g. `main`).
 It is recommended that you use [Squashing and merging a long-running branch](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges#squashing-and-merging-a-long-running-branch).
-Otherwise, you have the option to rebase your `{ISSUE_NUMBER-FEATURE_BRANCH_NAME}` branch with the base branch (e.g. `main`).
+Otherwise, you have the option to rebase your `{ISSUE_NUMBER_FEATURE_BRANCH}` branch with the base branch (e.g. `main`).
 ```
 git checkout main
 git pull origin main
-git checkout ISSUE_NUMBER-FEATURE_BRANCH #(e.g. git checkout 422-my-feature-branch)
+git checkout ISSUE_NUMBER_FEATURE_BRANCH #(e.g. git checkout 422-my-feature-branch)
 git fetch
 git rebase main
-#git status
-#edit conflicting files with your editor (vim in the terminal is strightforward but might like to use a different text editor)
-#git rebase --continue
-#git add .
+## RESOLVE CONFLICTS IN THE TERMINAL
+# git status
+# edit conflicting files with `vim` editor
+# git add .
+# git rebase --continue
+git push --force origin ISSUE_NUMBER_FEATURE_BRANCH
+## JUST MERGE changes from main
+git fetch
 git merge main
-git push --force origin FEATURE_BRANCH
+git push origin ISSUE_NUMBER_FEATURE_BRANCH
+## OTHER COMMANDS
+git push --force origin ISSUE_NUMBER_FEATURE_BRANCH
+git pull --rebase origin ISSUE_NUMBER_FEATURE_BRANCH
 ```
 5. Run `pre-commit run -a` to tidy up code and documentation.
 6. If you are developing in your local host, please check that your code is properly tested with `pytest`.
