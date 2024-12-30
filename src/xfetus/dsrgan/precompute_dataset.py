@@ -4,6 +4,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
+from loguru import logger
 from skimage import io
 from skimage.transform import resize
 from torchvision import transforms
@@ -19,20 +20,16 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--dataset_path", help="File location of the fetal brain dataset", type=str)
     args = parser.parse_args()
     root_dir = args.dataset_path
-
-    # Define augmentations for each image
-    transform_operations = transforms.Compose([
-      transforms.ToTensor(),
-      transforms.RandomHorizontalFlip(p=0.5),
-      transforms.RandomRotation(45),
-    ])
+    models_path = root_dir + 'models/dsrgan'
+    if not os.path.exists(models_path):
+        os.mkdir(models_path)
 
     # Load dataset csv metadata
-    #root_dir = '/content/FETAL_PLANES_ZENODO/'
     images_path = root_dir + 'Images/'
     csv_path = root_dir + 'FETAL_PLANES_DB_data.csv'
     csv_file = pd.read_csv(csv_path, sep=';')
     image_size = 128
+
 
     # Filter dataset
     e6_metadata = csv_file[csv_file['US_Machine'] == 'Voluson E6']
@@ -41,16 +38,23 @@ if __name__ == "__main__":
     train_dataset_size = 4000
     validation_dataset_size = 1000
 
+    # Define augmentations for each image
+    transform_operations = transforms.Compose([
+      transforms.ToTensor(),
+      transforms.RandomHorizontalFlip(p=0.5),
+      transforms.RandomRotation(45),
+    ])
 
     # Iterate though each plane
     planes = ['Other', 'Maternal cervix', 'Fetal abdomen', 'Fetal brain', 'Fetal femur', 'Fetal thorax']
     for p in planes:
+      logger.info(f" Plane: {p}")
       # Filter by plane
       plane_metadata = e6_metadata[e6_metadata['Plane'] == p]
 
       # Get the training data
       train_metadata = plane_metadata[plane_metadata['Train '] == 1]
-      print(len(train_metadata))
+      logger.info(f" Length of train_metadata {len(train_metadata)}")
 
       # Define empty dataset as numpy array of zeros
       train_dataset = np.zeros((train_dataset_size, image_size, image_size), dtype = np.float32)
@@ -78,14 +82,15 @@ if __name__ == "__main__":
           # Save the image into the dataset
           train_dataset[count,...] = small_image
           count += 1
+        logger.info(f" Count in train dataset {count}")
 
       # Save training data
-      #TODO add path to save MODEL_DEV
+      os.chdir(models_path)
       np.save(p + ' train.npy', train_dataset)
 
       # Get the test data
       validation_metadata = plane_metadata[plane_metadata['Train '] == 0]
-      print(len(validation_metadata))
+      logger.info(f" Length of validation_metadata {len(validation_metadata)}")
 
       # Define empty dataset as numpy array of zeros
       validation_dataset = np.zeros((validation_dataset_size, image_size, image_size), dtype = np.float32)
@@ -118,7 +123,9 @@ if __name__ == "__main__":
           # Save the image into the dataset
           validation_dataset[count,...] = small_image
           count += 1
-        print(count)
+        logger.info(f" Count in validation dataset {count}")
 
-      #TODO add path to save MODEL_DEV
+
+      # Save validation data
+      os.chdir(models_path)
       np.save(p + ' validation.npy', validation_dataset)
