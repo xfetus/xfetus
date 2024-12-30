@@ -58,8 +58,7 @@ if __name__ == "__main__":
     # Define hyperparameters
     image_size = 128
     batch_size = 4
-    # epochs = 5000
-    epochs = 1
+    epochs = 5000
     learning_rate = 1e-4
     grad_accumulation_steps = 8
 
