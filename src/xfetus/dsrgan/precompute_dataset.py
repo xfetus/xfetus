@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
       # Save training data
       os.chdir(models_path)
-      np.save(p + ' train.npy', train_dataset)
+      np.save(p.replace(" ", "_") + '_train.npy', train_dataset)
 
       # Get the test data
       validation_metadata = plane_metadata[plane_metadata['Train '] == 0]
@@ -128,4 +128,4 @@ if __name__ == "__main__":
 
       # Save validation data
       os.chdir(models_path)
-      np.save(p + ' validation.npy', validation_dataset)
+      np.save(p.replace(" ", "_") + '_validation.npy', validation_dataset)

@@ -1,4 +1,5 @@
 import argparse
+import os
 from os import path as osp
 
 import matplotlib.pyplot as plt
@@ -7,18 +8,20 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import wandb
-from ddpm_dataset import PrecomputedFetalPlaneDataset
 from diffusers import DDIMScheduler, DDPMPipeline
+from loguru import logger
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
+
+from xfetus.utils.datasets import PrecomputedFetalPlaneDataset
 
 if __name__ == "__main__":
     """
     Train baseline Denoising Diffusion Probabilistic Models (DDPM)
 
     Example to run api:
-        python -d $HOME/repositories/xfetus/xfetus/xfetus/improved-dsrgan
+    python train_baseline_ddpm.py -d  $HOME/datasets/FETAL_PLANES_DB_2020/models/dsrgan
     """
 
     ##################
@@ -55,7 +58,8 @@ if __name__ == "__main__":
     # Define hyperparameters
     image_size = 128
     batch_size = 4
-    epochs = 5000
+    # epochs = 5000
+    epochs = 1
     learning_rate = 1e-4
     grad_accumulation_steps = 8
 
@@ -68,22 +72,22 @@ if __name__ == "__main__":
 
     # define filenames for training data (saved as several numpy arrays)
     training_filenames = [
-        'Fetal abdomen train.npy',
-        'Fetal brain train.npy',
-        'Fetal femur train.npy',
-        'Fetal thorax train.npy',
-        'Maternal cervix train.npy',
-        'Other train.npy',
+        'Fetal_abdomen_train.npy',
+        'Fetal_brain_train.npy',
+        'Fetal_femur_train.npy',
+        'Fetal_thorax_train.npy',
+        'Maternal_cervix_train.npy',
+        'Other_train.npy',
     ]
 
     # define filenames for validation data (saved as several numpy arrays)
     validation_filenames = [
-        'Fetal abdomen validation.npy',
-        'Fetal brain validation.npy',
-        'Fetal femur validation.npy',
-        'Fetal thorax validation.npy',
-        'Maternal cervix validation.npy',
-        'Other validation.npy',
+        'Fetal_abdomen_validation.npy',
+        'Fetal_brain_validation.npy',
+        'Fetal_femur_validation.npy',
+        'Fetal_thorax_validation.npy',
+        'Maternal_cervix_validation.npy',
+        'Other_validation.npy',
     ]
 
     # Define augmentations for each image
@@ -94,11 +98,11 @@ if __name__ == "__main__":
     ])
 
     # create dataloader for training data
-    train_dataset = PrecomputedFetalPlaneDataset(dataset_path + 'train/', training_filenames)
+    train_dataset = PrecomputedFetalPlaneDataset(dataset_path, training_filenames)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
     # create dataloader for validation data
-    validation_dataset = PrecomputedFetalPlaneDataset(dataset_path + 'validation/', validation_filenames)
+    validation_dataset = PrecomputedFetalPlaneDataset(dataset_path, validation_filenames)
     validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=True)
 
     ##############################
@@ -130,15 +134,15 @@ if __name__ == "__main__":
     continues_training = False
     starting_epoch = 0
     lowest_validation_loss = 100
-    if continues_training:
-        image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth'))
-        starting_epoch = 250
-        optimizer.load_state_dict(torch.load('128x_optim_flawed.pth'))
+    # if continues_training:
+    #     image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
+    #     starting_epoch = 250
+    #     optimizer.load_state_dict(torch.load('128x_optim_flawed.pth')) #Where to get 128x_optim_flawed.pth
 
     #####################
     ##   4. TRAINING   ##
     #####################
-    print("Training started")
+    logger.info("Training started")
     for e in range(starting_epoch, epochs):
         losses = []
         for step, batch in tqdm(enumerate(train_loader), total=len(train_loader)):
@@ -235,8 +239,8 @@ if __name__ == "__main__":
         ####################
 
         # Log train/validation loss for this epoch
-        print(f"Epoch {e} average training loss: {average_epoch_loss}")
-        print(f"Epoch {e} average validation loss: {average_validation_loss}")
+        logger.info(f"Epoch {e} average training loss: {average_epoch_loss}")
+        logger.info(f"Epoch {e} average validation loss: {average_validation_loss}")
         if wandb_enabled:
             wandb.log({"Training Loss" : average_epoch_loss})
             wandb.log({"Validation Loss" : average_validation_loss})
@@ -271,11 +275,9 @@ if __name__ == "__main__":
             else:
                 plt.imshow(validation_img)
                 plt.show()
-                print("Average pixel value: " + str(np.mean(x.detach().cpu().numpy())))
-
+                logger.info("Average pixel value: " + str(np.mean(x.detach().cpu().numpy())))
 
         # Save model
-        #TODO add path to save MODEL_DEV
         if lowest_validation_loss > average_validation_loss:
-            torch.save(image_pipe.unet.state_dict(), '128x_baseline.pth')
+            torch.save(image_pipe.unet.state_dict(), dataset_path+'/128x_baseline.pth')
             lowest_validation_loss = average_validation_loss

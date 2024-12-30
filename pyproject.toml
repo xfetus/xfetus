@@ -52,6 +52,7 @@ learning = [
     "einops",
     "scikit-learn",
     "diffusers",
+    "accelerate",
     "basicsr",
 ]
 
