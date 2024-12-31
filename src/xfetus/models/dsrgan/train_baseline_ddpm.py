@@ -21,9 +21,6 @@ from xfetus.utils.datasets import PrecomputedFetalPlaneDataset
 if __name__ == "__main__":
     """
     Train baseline Denoising Diffusion Probabilistic Models (DDPM)
-
-    Example to run api:
-    python src/xfetus/models/dsrgan/train_baseline_ddpm.py -c configs/models/config_train_baseline_ddpm.yaml
     """
 
     ##################

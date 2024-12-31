@@ -14,8 +14,6 @@ from torchvision import transforms
 if __name__ == "__main__":
     """
     Script to create numpy arrays with train and validation datasets per label
-
-    python src/xfetus/models/dsrgan/precompute_dataset.py -c configs/data/config_precompute_dataset_for_dsrgan.yaml
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config_file", help="Config filename including path", type=str)
