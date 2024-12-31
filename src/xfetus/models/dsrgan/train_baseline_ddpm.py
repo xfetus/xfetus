@@ -1,6 +1,7 @@
 import argparse
 import os
 from os import path as osp
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,6 +11,7 @@ import torch.nn.functional as F
 import wandb
 from diffusers import DDIMScheduler, DDPMPipeline
 from loguru import logger
+from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
@@ -21,7 +23,7 @@ if __name__ == "__main__":
     Train baseline Denoising Diffusion Probabilistic Models (DDPM)
 
     Example to run api:
-    python train_baseline_ddpm.py -d  $HOME/datasets/FETAL_PLANES_DB_2020/models/dsrgan
+    python src/xfetus/models/dsrgan/train_baseline_ddpm.py -c configs/models/config_train_baseline_ddpm.yaml
     """
 
     ##################
@@ -30,37 +32,36 @@ if __name__ == "__main__":
 
     # Command line aurgments - for script
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dataset_path", help="File location of the fetal brain dataset", type=str)
-    parser.add_argument("-w", "--wandb_enabled", help="Enable weights and bias logging", type=bool)
-    #parser.add_argument("-p", "--ddpm_checkpoint_path", default=None,  help="File location for the pre-trained DDPM model", type=str)
-    #parser.add_argument("-o", "--optimizer_checkpoint_path", default=None,  help="File location for an optimizer from a previous run", type=str)
+    parser.add_argument("-c", "--config_file", help="Config filename with path", type=str)
     args = parser.parse_args()
-    wandb_enabled = args.wandb_enabled
-    dataset_path = args.dataset_path
-    #ddpm_checkpoint_path = args.ddpm_checkpoint_path
+    config_file = args.config_file
+    config = OmegaConf.load(config_file)
+    wandb_enabled = config.wandb.enabled
+    models_path = config.paths.models_path
+    MODELS_PATH = os.path.join(Path.home(), models_path)
     # Command line aurgments - for google colab
     '''wandb_enabled = True
-    dataset_path = '/content/gdrive/MyDrive/'
+    MODELS_PATH = '/content/gdrive/MyDrive/'
     ddpm_checkpoint_path = None'''
 
-    # start a new wandb run to track this script
-    if wandb_enabled:
-        wandb.init(
-            # set the wandb project where this run will be logged
-            project="my-awesome-project",
-            # track hyperparameters and run metadata
-            config={
-                "architecture": "CNN",
-                "dataset": "Fetal Plane dataset",
-            }
-        )
+    # # start a new wandb run to track this scripts
+    # if wandb_enabled:
+    #     wandb.init(
+    #         # set the wandb project where this run will be logged
+    #         project="my-awesome-project",
+    #         # track hyperparameters and run metadata
+    #         config={
+    #             "architecture": "CNN",
+    #             "dataset": "Fetal Plane dataset",
+    #         }
+    #     )
 
     # Define hyperparameters
-    image_size = 128
-    batch_size = 4
-    epochs = 5000
-    learning_rate = 1e-4
-    grad_accumulation_steps = 8
+    image_size = config.model_hyperparameters.image_size
+    batch_size = config.model_hyperparameters.batch_size
+    epochs = config.model_hyperparameters.epochs
+    learning_rate = config.model_hyperparameters.learning_rate
+    grad_accumulation_steps = config.model_hyperparameters.grad_accumulation_steps
 
     # Are we using a GPU or CPU?
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -97,11 +98,11 @@ if __name__ == "__main__":
     ])
 
     # create dataloader for training data
-    train_dataset = PrecomputedFetalPlaneDataset(dataset_path, training_filenames)
+    train_dataset = PrecomputedFetalPlaneDataset(MODELS_PATH, training_filenames)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
     # create dataloader for validation data
-    validation_dataset = PrecomputedFetalPlaneDataset(dataset_path, validation_filenames)
+    validation_dataset = PrecomputedFetalPlaneDataset(MODELS_PATH, validation_filenames)
     validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=True)
 
     ##############################
@@ -121,18 +122,18 @@ if __name__ == "__main__":
         image_pipe.unet.class_embedding = nn.Embedding(total_classes, time_embed_dim, device=device)
 
     # Define scheduler
-    total_steps = 1000
-    inference_steps = 40
+    total_steps = config.model_optimiser.total_steps
+    inference_steps = config.model_optimiser.inference_steps
     scheduler = DDIMScheduler(num_train_timesteps=total_steps, rescale_betas_zero_snr=True)
     scheduler.set_timesteps(inference_steps)
-    scheduler.timesteps[0] = 999
+    scheduler.timesteps[0] = config.model_optimiser.scheduler_timesteps
 
     # Define optimization algorithm
     optimizer = torch.optim.Adam(image_pipe.unet.parameters(), lr=learning_rate)
 
-    continues_training = False
-    starting_epoch = 0
-    lowest_validation_loss = 100
+    continues_training = config.model_optimiser.continues_training
+    starting_epoch = config.model_optimiser.starting_epoch
+    lowest_validation_loss = config.model_optimiser.lowest_validation_loss
     # if continues_training:
     #     image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
     #     starting_epoch = 250
@@ -278,5 +279,6 @@ if __name__ == "__main__":
 
         # Save model
         if lowest_validation_loss > average_validation_loss:
-            torch.save(image_pipe.unet.state_dict(), dataset_path+'/128x_baseline.pth')
+            model_path_name = MODELS_PATH+'/'+ config.paths.model_name
+            torch.save(image_pipe.unet.state_dict(), model_path_name)
             lowest_validation_loss = average_validation_loss
