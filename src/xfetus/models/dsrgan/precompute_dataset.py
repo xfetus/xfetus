@@ -1,10 +1,12 @@
 import argparse
 import os
+from pathlib import Path
 
 import cv2
 import numpy as np
 import pandas as pd
 from loguru import logger
+from omegaconf import OmegaConf
 from skimage import io
 from skimage.transform import resize
 from torchvision import transforms
@@ -13,30 +15,33 @@ if __name__ == "__main__":
     """
     Script to create numpy arrays with train and validation datasets per label
 
-    python precompute_dataset.py -d $HOME/datasets/FETAL_PLANES_DB_2020/
+    python src/xfetus/models/dsrgan/precompute_dataset.py -c configs/data/config_precompute_dataset_for_dsrgan.yaml
     """
-    # Command line aurgments - for script
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dataset_path", help="File location of the fetal brain dataset", type=str)
+    parser.add_argument("-c", "--config_file", help="Config filename including path", type=str)
     args = parser.parse_args()
-    root_dir = args.dataset_path
-    models_path = root_dir + 'models/dsrgan'
-    if not os.path.exists(models_path):
-        os.mkdir(models_path)
+    config_file = args.config_file
+    config = OmegaConf.load(config_file)
+    data_path = config.dataset.path
+    models_path = config.dataset.models_path
+    DATA_PATH = os.path.join(Path.home(), data_path)
+    MODELS_PATH = os.path.join(Path.home(), models_path)
+
+    if not os.path.exists(MODELS_PATH):
+        os.mkdir(MODELS_PATH)
 
     # Load dataset csv metadata
-    images_path = root_dir + 'Images/'
-    csv_path = root_dir + 'FETAL_PLANES_DB_data.csv'
+    images_path = os.path.join(DATA_PATH, 'Images')
+    csv_path = os.path.join(DATA_PATH, 'FETAL_PLANES_DB_data.csv')
     csv_file = pd.read_csv(csv_path, sep=';')
-    image_size = 128
-
+    image_size = config.dataset.image_size
 
     # Filter dataset
     e6_metadata = csv_file[csv_file['US_Machine'] == 'Voluson E6']
 
     # Define how many images will be in the results datasets
-    train_dataset_size = 4000
-    validation_dataset_size = 1000
+    train_dataset_size = config.dataset.train_dataset_size
+    validation_dataset_size = config.dataset.validation_dataset_size
 
     # Define augmentations for each image
     transform_operations = transforms.Compose([
@@ -85,7 +90,7 @@ if __name__ == "__main__":
         logger.info(f" Count in train dataset {count}")
 
       # Save training data
-      os.chdir(models_path)
+      os.chdir(MODELS_PATH)
       np.save(p.replace(" ", "_") + '_train.npy', train_dataset)
 
       # Get the test data
@@ -127,5 +132,5 @@ if __name__ == "__main__":
 
 
       # Save validation data
-      os.chdir(models_path)
+      os.chdir(MODELS_PATH)
       np.save(p.replace(" ", "_") + '_validation.npy', validation_dataset)

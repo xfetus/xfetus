@@ -1,0 +1,9 @@
+
+
+dataset:
+    path: "datasets/FETAL_PLANES_DB_2020"
+    models_path: "datasets/FETAL_PLANES_DB_2020/models/dsrgantest"
+    image_size: 128
+    train_dataset_size: 40 #4000
+    validation_dataset_size: 10 #1000
+
