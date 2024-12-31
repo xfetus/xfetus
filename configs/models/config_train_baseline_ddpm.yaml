@@ -23,4 +23,3 @@ model_optimiser:
     continues_training: False
     starting_epoch: 0
     lowest_validation_loss: 100
-
