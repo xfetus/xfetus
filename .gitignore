@@ -19,7 +19,7 @@
 ## others
 **/*sr_gan_loss.csv
 
-## ignore datapaths 
+## ignore datapaths
 **/data/experiments
 
 ## temporal __pycache__/
@@ -59,3 +59,6 @@ dist/
 *.egg-info/
 
 *.DS_Store
+
+# wandb
+wandb/

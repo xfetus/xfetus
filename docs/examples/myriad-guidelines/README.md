@@ -32,19 +32,19 @@ unzip FETAL_PLANES_ZENODO.zip
 
 4. Clone repo in Myriad cluster and run lines
 ```
-git clone git@github.com:budai4medtech/xfetus.git
+git clone git@github.com:xfetus/xfetus.git
 ```
 
 4.1 Load modules 
 ```
 cd xfetus/examples/myriad-guidelines/
-source loading_modules.sh #REF1  
+source loading_modules.sh #See [REF1]
 ```
 4.2 Create conda virtual environments
  
 4.2.1 Open a new terminal to copy virtual environment
 ```
-cd xfetus/dependencies
+cd xfetus/docs/dependencies
 ```
 
 4.2.2. Create your python virtual env as follows

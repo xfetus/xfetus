@@ -1,0 +1,45 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    -   id: trailing-whitespace
+        exclude: 'data/.*|docs/.*'
+        exclude_types: [markdown]
+    -   id: end-of-file-fixer
+        exclude: 'data/.*|docs/.*'
+        exclude_types: [markdown]
+    -   id: check-yaml
+        exclude: '.github/workflows/.*'
+    -   id: check-added-large-files
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+          [
+           "--rcfile=tests/.pylintrc"
+          ]
+        exclude: 'data/.*|docs/.*|_deps/.*' #|src/xfetus/.*|tests/.*'
+      - id: black
+        name: black
+        entry: black
+        language: system
+        types: [python]
+        exclude: 'src/xfetus/.*|tests/.*'
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        types: [python]
+      - id: codespell
+        name: codespell
+        description: Checks for common misspellings in text files.
+        entry: codespell
+        language: python
+        types: [ text ]
+        exclude: 'data/.*|docs/.*'

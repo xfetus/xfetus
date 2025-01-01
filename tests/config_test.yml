@@ -1,0 +1,3 @@
+AFRICAN_DATA_PATH: "datasets/african-fetal-us-2023/Zenodo_dataset"
+SPANISH_FETAL_PLANES_DATA_PATH: "datasets/FETAL_PLANES_DB_2020"
+CHECKPOINTS_PATH: "datasets/_TO_ADD_"
