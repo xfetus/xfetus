@@ -8,13 +8,14 @@ import torch.nn.functional as F
 import torch.nn.parallel
 import torch.utils.data
 import torchvision.transforms as transforms
-import wandb
 from diffusers import DDIMScheduler, DDPMPipeline
 from skimage import io
 from torch.utils.data import DataLoader, Dataset
 from torchmetrics.image.fid import FrechetInceptionDistance
 from torchvision import transforms
 from tqdm.auto import tqdm
+
+import wandb
 
 
 class FetalPlaneDataset(Dataset):

@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as F
-import wandb
 from basicsr.data import build_dataloader, build_dataset
 from basicsr.models import build_model
 from basicsr.utils import (get_env_info, get_root_logger, get_time_str,
@@ -19,6 +18,8 @@ from sr_dataset import FetalPlaneDataset
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
+
+import wandb
 
 if __name__ == "__main__":
     """

@@ -1,18 +1,18 @@
 
 paths:
     data_path: "datasets/FETAL_PLANES_DB_2020"
-    models_path: "datasets/FETAL_PLANES_DB_2020/models/dsrgantest"
+    models_path: "datasets/FETAL_PLANES_DB_2020/models/dsrgan"
     model_name: "128x_baseline.pth"
     ddpm_checkpoint_path: "TOADD" #File location for the pre-trained DDPM model
     optimizer_checkpoint_path: "TOADD" #File location for an optimizer from a previous run
 
 wandb:
-    enabled: False #Enable weights and bias logging
+    enabled: True #Enable weights and bias logging
 
 model_hyperparameters:
     image_size: 128
     batch_size: 4
-    epochs: 5000 #1
+    epochs: 5000
     learning_rate: 1e-4
     grad_accumulation_steps: 8
 

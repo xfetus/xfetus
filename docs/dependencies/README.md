@@ -22,7 +22,7 @@ source .venv/bin/activate #To activate the virtual environment:
 ### Activate VE and install lib
 ```
 source .venv/bin/activate #To activate the virtual environment:
-uv pip install --editable . # Install the package in editable mode
+uv pip install -e ".[test,learning]" # Install the package in editable mode
 ```
 
 ### lauch jupyter notebooks
@@ -69,7 +69,7 @@ $ hostnamectl
       Machine ID: --
          Boot ID: --
 Operating System: Ubuntu 22.04.1 LTS              
-          Kernel: Linux 5.15.0-56-generic
+          Kernel: Linux 6.8.0-49-generic
     Architecture: x86-64
  Hardware Vendor: --
 

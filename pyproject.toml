@@ -36,6 +36,7 @@ dependencies = [
     "loguru",
     "omegaconf",
     "pyyaml",
+    "wandb",
 ]
 [project.optional-dependencies]
 test = [

@@ -7,7 +7,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wandb
 from ddpm_dataset import PrecomputedFetalPlaneDataset
 from diffusers import DDIMScheduler, DDPMPipeline
 from haar_pytorch import HaarForward, HaarInverse
@@ -15,6 +14,8 @@ from loss import loss_hf, loss_hfmse, loss_img
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
+
+import wandb
 
 if __name__ == "__main__":
 

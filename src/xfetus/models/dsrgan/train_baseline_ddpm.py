@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import wandb
 from diffusers import DDIMScheduler, DDPMPipeline
 from loguru import logger
 from omegaconf import OmegaConf
@@ -16,6 +15,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 
+import wandb
 from xfetus.utils.datasets import PrecomputedFetalPlaneDataset
 
 if __name__ == "__main__":
@@ -41,17 +41,17 @@ if __name__ == "__main__":
     MODELS_PATH = '/content/gdrive/MyDrive/'
     ddpm_checkpoint_path = None'''
 
-    # # start a new wandb run to track this scripts
-    # if wandb_enabled:
-    #     wandb.init(
-    #         # set the wandb project where this run will be logged
-    #         project="my-awesome-project",
-    #         # track hyperparameters and run metadata
-    #         config={
-    #             "architecture": "CNN",
-    #             "dataset": "Fetal Plane dataset",
-    #         }
-    #     )
+    # start a new wandb run to track this scripts
+    if wandb_enabled:
+        wandb.init(
+            # set the wandb project where this run will be logged
+            project="my-awesome-project",
+            # track hyperparameters and run metadata
+            config={
+                "architecture": "CNN",
+                "dataset": "Fetal Plane dataset",
+            }
+        )
 
     # Define hyperparameters
     image_size = config.model_hyperparameters.image_size
