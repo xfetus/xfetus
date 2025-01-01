@@ -1,6 +1,6 @@
-# Datasets
+# Public Datasets (3/3)
 
-## FETAL_PLANES_DB: Common maternal-fetal ultrasound images from Spain
+## (1/3) FETAL_PLANES_DB: Common maternal-fetal ultrasound images from Spain
 ### Highlights
 * Common maternal-fetal ultrasound images from Spain (2.1 GB)
 * License: Creative Commons Attribution 4.0 International (CC BY 4.0)
@@ -70,7 +70,7 @@ $ tree -fs
 1 directory, 12403 files
 ```
 
-## Maternal fetal ultrasound planes from low-resource imaging settings in five African countries
+## (2/3) Maternal fetal ultrasound planes from low-resource imaging settings in five African countries
 ### Highlights
 * Ultrasound planes from five African countries (456 items, totalling 55.7 MB)
 * License: Creative Commons Attribution 4.0 International (CC BY 4.0)
@@ -179,9 +179,9 @@ cp Uganda/*.png Images/
 > Scientific reports 13, no. 1 (2023): 2728.
 
 
-## Large-Scale Annotation Dataset for Fetal Head Biometry in Ultrasound Images
+## (3/3) Large-Scale Annotation Dataset for Fetal Head Biometry in Ultrasound Images
 ### Highlights
-* Diverse Fetal Head Images-orginal-image.zip (2.4 GB)
+* Diverse Fetal Head Images, including segmentations for fetal head, CPS and LP (2.4 GB).
 * License: Creative Commons Attribution 4.0 International (CC BY 4.0)
 * Total Images: 3,832
 * Image Dimensions: 959 x 661 pixels
@@ -189,13 +189,23 @@ cp Uganda/*.png Images/
 * Link https://zenodo.org/records/8265464
 
 ## Overview
-> This dataset provides a comprehensive collection of ultrasound images focusing on fetal head biometry. It is designed to support the development and evaluation of image segmentation and biometric analysis algorithms in prenatal diagnostics. The images have been carefully annotated by experts in the field, ensuring high-quality data for researchers.
+> This dataset provides a comprehensive collection of ultrasound images focusing on fetal head biometry. 
+The dataset includes segmentation of fetal head ultrasound images are based on four categories: background, fetal brain, ***cavum septum pellucidum (CSP)***, and ***lateral ventricles (LV)***.
+The dataset is designed to support the development and evaluation of image segmentation and biometric analysis algorithms in prenatal diagnostics. The images have been carefully annotated by experts in the field, ensuring high-quality data for researchers.  
+* "Segmenting internal structures like the CSP and LV provides deeper insights into fetal neurodevelopment [3]. The CSP, a naturally occurring division between the left and right hemispheres, can serve as an early indicator of potential brain abnormalities [15]. The LV, on the other hand, are fluid-filled cavities related to conditions such as ventriculomegaly and neural tube defects [16]. Accurate segmentation of these structures is critical for monitoring fetal brain development, thereby enabling better-informed parental decisions and preparing the clinical team for post-birth interventions."
 
-Alzubaidi, Mahmood, Uzair Shah, Marco Agus, and Mowafa Househ. "FetSAM: Advanced Segmentation Techniques for Fetal Head Biometrics in Ultrasound Imagery." IEEE Open Journal of Engineering in Medicine and Biology (2024). 
-[article](https://ieeexplore.ieee.org/abstract/document/10480532/)
-[google-citations](https://scholar.google.com/scholar?cites=14101294037409299090&as_sdt=2005&sciodt=0,5&hl=en)
+
+### Example of the dataset
+![fig](fig1-alzubaidi-2024.png)  
+**Fig** Example of location of Fetal Brain plain, CSP, and LV in the ultrasound image (fig1 from Alzubaidi et al. 2024)
+
 
 ### Download
 ```
 wget https://zenodo.org/api/records/8265464/files-archive -O DiverseFetalHeadImages-orginal-image.zip
 ```
+
+### Reference
+Alzubaidi, Mahmood, Uzair Shah, Marco Agus, and Mowafa Househ. "FetSAM: Advanced Segmentation Techniques for Fetal Head Biometrics in Ultrasound Imagery." IEEE Open Journal of Engineering in Medicine and Biology (2024). 
+[article](https://ieeexplore.ieee.org/abstract/document/10480532/)
+[google-citations](https://scholar.google.com/scholar?cites=14101294037409299090&as_sdt=2005&sciodt=0,5&hl=en)
