@@ -1,0 +1,34 @@
+AFRICAN_DATA_PATH: "datasets/african-fetal-us-2023/Zenodo_dataset"
+SPANISH_FETAL_PLANES_DATA_PATH: "datasets/FETAL_PLANES_DB_2020"
+CHECKPOINTS_PATH: "datasets/_TO_ADD_"
+MODELS_PATH: "datasets/FETAL_PLANES_DB_2020/models/latentdiffusion"
+ddpm_checkpoint_path: "TOADD" #File location for the pre-trained DDPM model
+optimizer_checkpoint_path: "TOADD" #File location for an optimizer from a previous run
+
+model:
+    name: "128x_baseline"
+    save_flag: True #True or False
+
+diffusers:
+    # model_name: "google/ddpm-celebahq-256"
+    model_name: "CompVis/stable-diffusion-v1-4"
+    vae_name: "stabilityai/sd-vae-ft-mse"
+
+
+wandb:
+    enabled: False #Enable weights and bias logging
+
+model_hyperparameters:
+    image_size: 256 #64 #128
+    batch_size: 2 #4
+    epochs: 1 #5000
+    learning_rate: !!float 1e-4
+    grad_accumulation_steps: 8
+
+model_optimiser:
+    total_steps: 1000
+    inference_steps: 40
+    scheduler_timesteps: 999
+    continues_training: False
+    starting_epoch: 0
+    lowest_validation_loss: 100
