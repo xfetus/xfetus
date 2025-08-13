@@ -1,23 +1,22 @@
 import os
-from pathlib import Path
-
-import yaml
-from loguru import logger
 import time
 from datetime import datetime
-from tqdm import tqdm
+from pathlib import Path
 
 import torch
 import torch.nn as nn
-from torchvision import transforms
-from torch.utils.data import DataLoader
 import torch.nn.functional as F
-
-from diffusers import DDIMScheduler, DDPMPipeline
+import yaml
+from diffusers import DDIMScheduler, DDPMPipeline, StableDiffusionPipeline
 from diffusers.models import AutoencoderKL
-from diffusers import StableDiffusionPipeline
+from loguru import logger
+from torch.utils.data import DataLoader
+from torchvision import transforms
+from tqdm import tqdm
 
-from xfetus.utils.datasets import AfricanFetalPlaneDataset, PrecomputedFetalPlaneDataset
+import wandb
+from xfetus.utils.datasets import (AfricanFetalPlaneDataset,
+                                   PrecomputedFetalPlaneDataset)
 
 file=Path().absolute()/"tests/config_test_latent_diffusion.yml"
 with open(file, "r") as file:
@@ -32,7 +31,7 @@ def test_data_path():
    https://github.com/ashleve/lightning-hydra-template/blob/main/tests/conftest.py
    """
    MODELS_PATH = os.path.join(str(Path.home()), config_yaml["MODELS_PATH"])
-   DATASET_PATH = os.path.join(str(Path.home()), config_yaml["SPANISH_FETAL_PLANES_DATA_PATH"])      
+   DATASET_PATH = os.path.join(str(Path.home()), config_yaml["SPANISH_FETAL_PLANES_DATA_PATH"])
    batch_size = config_yaml["model_hyperparameters"]["batch_size"]
 
    # define filenames for training data (saved as several numpy arrays)
@@ -80,11 +79,11 @@ def test_train():
    pytest -vs tests/test_latent_diffusion.py::test_train
    """
    # Define model variables
-   DATASET_PATH = os.path.join(str(Path.home()), config_yaml["SPANISH_FETAL_PLANES_DATA_PATH"])         
+   DATASET_PATH = os.path.join(str(Path.home()), config_yaml["SPANISH_FETAL_PLANES_DATA_PATH"])
    MODELS_PATH = os.path.join(str(Path.home()), config_yaml["MODELS_PATH"])
    MODEL_NAME = config_yaml["model"]["name"]
    MODEL_SAVEFLAG = config_yaml["model"]["save_flag"]
-   
+
 
    wandb_enabled = config_yaml["wandb"]["enabled"]
 
@@ -144,10 +143,10 @@ def test_train():
    # Download pre trained diffusion model from huggingface
    diffusers_model_name = config_yaml["diffusers"]["model_name"]
    diffusers_vae_name = config_yaml["diffusers"]["vae_name"]
-   
+
    # image_pipe = DDPMPipeline.from_pretrained(diffusers_model_name)
    vae = AutoencoderKL.from_pretrained(diffusers_vae_name)
-   image_pipe = StableDiffusionPipeline.from_pretrained(diffusers_model_name, vae=vae)   
+   image_pipe = StableDiffusionPipeline.from_pretrained(diffusers_model_name, vae=vae)
 
    image_pipe.to(device)
 
@@ -170,14 +169,14 @@ def test_train():
    optimizer = torch.optim.Adam(image_pipe.unet.parameters(), lr=learning_rate)
 
    continues_training = config_yaml["model_optimiser"]["continues_training"]
-   starting_epoch = config_yaml["model_optimiser"]["starting_epoch"] 
-   lowest_validation_loss = config_yaml["model_optimiser"]["lowest_validation_loss"]  
+   starting_epoch = config_yaml["model_optimiser"]["starting_epoch"]
+   lowest_validation_loss = config_yaml["model_optimiser"]["lowest_validation_loss"]
    # if continues_training:
    #     image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
    #     starting_epoch = 250
    #     optimizer.load_state_dict(torch.load('128x_optim_flawed.pth')) #Where to get 128x_optim_flawed.pth
 
-   
+
    starttime = time.time()  # print(f'Starting training loop at {startt}')
 
 

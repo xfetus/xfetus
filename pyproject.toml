@@ -28,15 +28,13 @@ dependencies = [
     "matplotlib",
     "opencv-python-headless",
     "notebook",
-    "scikit-image",
+    "scikit-image==0.25.0",
     "tqdm",
-    "wandb",
     "pandas",
     "PyQt6",
     "loguru",
     "omegaconf",
     "pyyaml",
-    "wandb",
 ]
 [project.optional-dependencies]
 test = [
@@ -48,14 +46,15 @@ test = [
     "pre-commit"
 ]
 learning = [
-    "torch",
-    "torchvision",
-    "einops",
-    "scikit-learn",
-    "diffusers",
-    "transformers",
-    "accelerate",
-    "basicsr",
+    "torch==2.5.1",
+    "torchvision==0.20.1",
+    "einops==0.8.0",
+    "scikit-learn==1.6.0",
+    "diffusers==0.32.0",
+    "transformers==4.48.0",
+    "accelerate==1.2.1",
+    "basicsr==1.4.2",
+    "wandb==0.19.1",
 ]
 
 [tool.setuptools.dynamic]
