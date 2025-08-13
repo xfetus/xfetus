@@ -3,6 +3,8 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -151,7 +153,7 @@ def test_train():
    image_pipe.to(device)
 
    # Add class conditioning to our UNet
-   add_conditioning = True
+   add_conditioning = config_yaml["model_optimiser"]["add_conditioning"]
    if add_conditioning:
       time_embed_dim = image_pipe.unet.time_embedding.linear_1.out_features
       total_classes = len(training_filenames)
@@ -168,29 +170,31 @@ def test_train():
    # Define optimization algorithm
    optimizer = torch.optim.Adam(image_pipe.unet.parameters(), lr=learning_rate)
 
-   continues_training = config_yaml["model_optimiser"]["continues_training"]
    starting_epoch = config_yaml["model_optimiser"]["starting_epoch"]
    lowest_validation_loss = config_yaml["model_optimiser"]["lowest_validation_loss"]
-   # if continues_training:
-   #     image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
-   #     starting_epoch = 250
-   #     optimizer.load_state_dict(torch.load('128x_optim_flawed.pth')) #Where to get 128x_optim_flawed.pth
-
-
-   starttime = time.time()  # print(f'Starting training loop at {startt}')
+   continues_training = config_yaml["model_optimiser"]["continues_training"]
+   if continues_training:
+       image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
+       starting_epoch = 250
+       optimizer.load_state_dict(torch.load('128x_optim_flawed.pth')) #Where to get 128x_optim_flawed.pth
 
 
    #####################
    ##   4. TRAINING   ##
    #####################
-   logger.info("Training started")
+   starttime = time.time()
+   logger.info("Training started at {starttime}")
    for e in range(starting_epoch, epochs):
       losses = []
       for step, batch in tqdm(enumerate(train_loader), total=len(train_loader)):
          # Sample an image from dataset and make it a three channel (RGB) image
+         # Question. Wondering if original dataset is in RGB format or just grayscale?
          clean_images, class_labels = batch
          clean_images = torch.unsqueeze(clean_images, 1)
          clean_images = torch.cat((clean_images, clean_images, clean_images), dim=1)
+
+         logger.info(f" clean_images size: {clean_images.shape}, class_labels: {class_labels}")
+         # class_labels.shape[0] must match noisy_images.shape[0] (the batch size).
 
          # Move data to whatever device we are using
          clean_images = clean_images.to(device)

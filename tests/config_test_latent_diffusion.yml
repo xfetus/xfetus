@@ -20,7 +20,7 @@ wandb:
 
 model_hyperparameters:
     image_size: 128 #256 #64 #128
-    batch_size: 2 #4
+    batch_size: 3 #4
     epochs: 1 #5000
     learning_rate: !!float 1e-4
     grad_accumulation_steps: 8
@@ -29,6 +29,7 @@ model_optimiser:
     total_steps: 1000
     inference_steps: 40
     scheduler_timesteps: 999
+    add_conditioning: True
     continues_training: False
     starting_epoch: 0
     lowest_validation_loss: 100
