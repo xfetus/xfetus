@@ -23,7 +23,7 @@ The following bash scripts make use of [config files](../configs/) that need to 
 
 * Generate data. Please update [config_precompute_dataset_for_dsrgan.yaml](../configs/data/config_precompute_dataset_for_dsrgan.yaml) to update variables in [precompute_datasets.py](../../../src/xfetus/models/dsrgan/precompute_dataset.py) according to your needs.
 ```
-bash scripts/precompute_dataset_ddpm.bash using   
+bash scripts/precompute_dataset_ddpm.bash
 ```
 
 * Developing and testing train pipeline [config_test_latent_diffusion.yml](../../../tests/config_test_latent_diffusion.yml).
@@ -31,7 +31,7 @@ bash scripts/precompute_dataset_ddpm.bash using
 bash scripts/test_latent_diffusion.bash
 ```
 
- * File outputs will look like:
+* Example of file outputs:
  ```
 ~/datasets/FETAL_PLANES_DB_2020/models/latentdiffusion$ tree -h
 [4.0K]  .

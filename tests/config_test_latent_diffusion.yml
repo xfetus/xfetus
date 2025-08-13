@@ -19,7 +19,7 @@ wandb:
     enabled: False #Enable weights and bias logging
 
 model_hyperparameters:
-    image_size: 256 #64 #128
+    image_size: 128 #256 #64 #128
     batch_size: 2 #4
     epochs: 1 #5000
     learning_rate: !!float 1e-4
