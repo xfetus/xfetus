@@ -266,7 +266,7 @@ def test_train():
 
          # Get the model prediction for the noise
          if add_conditioning:
-               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, class_labels, return_dict=False)[0]
+               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, class_labels=class_labels, return_dict=False)[0]
          else:
                noise_pred = image_pipe.unet(noisy_images.float(), timesteps, return_dict=False)[0]
 
