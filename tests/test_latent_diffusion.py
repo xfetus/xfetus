@@ -193,9 +193,6 @@ def test_train():
          clean_images = torch.unsqueeze(clean_images, 1)
          clean_images = torch.cat((clean_images, clean_images, clean_images), dim=1)
 
-         logger.info(f" clean_images size: {clean_images.shape}, class_labels: {class_labels}")
-         # class_labels.shape[0] must match noisy_images.shape[0] (the batch size).
-
          # Move data to whatever device we are using
          clean_images = clean_images.to(device)
          class_labels = class_labels.to(device)
@@ -214,9 +211,12 @@ def test_train():
          # Forward diffusion process (Add noise to the clean images according to the noise magnitude at each timestep)
          noisy_images = image_pipe.scheduler.add_noise(clean_images, noise, timesteps)
 
+         # logger.info(f" clean_images size: {clean_images.shape}, class_labels: {class_labels}")
+         # logger.info(f" noisy_images size: {noisy_images.shape}, timesteps: {timesteps}")
+
          # Get the model prediction for the noise
          if add_conditioning:
-               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, class_labels, return_dict=False)[0]
+               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, class_labels=class_labels, return_dict=False)[0]
          else:
                noise_pred = image_pipe.unet(noisy_images.float(), timesteps, return_dict=False)[0]
 
