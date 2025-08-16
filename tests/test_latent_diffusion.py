@@ -9,7 +9,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import yaml
-from diffusers import DDIMScheduler, DDPMPipeline, StableDiffusionPipeline
+from diffusers import DDIMScheduler, StableDiffusionPipeline, UNet2DModel
 from diffusers.models import AutoencoderKL
 from loguru import logger
 from torch.utils.data import DataLoader
@@ -80,11 +80,14 @@ def test_train():
    Test data path
    pytest -vs tests/test_latent_diffusion.py::test_train
    """
-   # Define model variables
+   # Define variables
    DATASET_PATH = os.path.join(str(Path.home()), config_yaml["SPANISH_FETAL_PLANES_DATA_PATH"])
    MODELS_PATH = os.path.join(str(Path.home()), config_yaml["MODELS_PATH"])
    MODEL_NAME = config_yaml["model"]["name"]
    MODEL_SAVEFLAG = config_yaml["model"]["save_flag"]
+   CONFIG_UNET = config_yaml["model"]["config_unet"]
+   PLOT_ENABLED = config_yaml["plot"]["enabled"]
+   add_conditioning = config_yaml["model_optimiser"]["add_conditioning"]
 
 
    wandb_enabled = config_yaml["wandb"]["enabled"]
@@ -100,7 +103,7 @@ def test_train():
    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
    ####################
-   ##   2. DATASET   ##
+   ##   1. DATASET   ##
    ####################
 
    # define filenames for training data (saved as several numpy arrays)
@@ -139,26 +142,25 @@ def test_train():
    validation_loader = DataLoader(validation_dataset, batch_size=batch_size, shuffle=True)
 
    ##############################
-   ##   3. MODEL & OPTIMIZER   ##
+   ##   2. MODEL & OPTIMIZER   ##
    ##############################
 
    # Download pre trained diffusion model from huggingface
    diffusers_model_name = config_yaml["diffusers"]["model_name"]
    diffusers_vae_name = config_yaml["diffusers"]["vae_name"]
 
-   # image_pipe = DDPMPipeline.from_pretrained(diffusers_model_name)
    vae = AutoencoderKL.from_pretrained(diffusers_vae_name)
+   vae = vae.to(device)
    image_pipe = StableDiffusionPipeline.from_pretrained(diffusers_model_name, vae=vae)
-
    image_pipe.to(device)
 
    # Add class conditioning to our UNet
-   add_conditioning = config_yaml["model_optimiser"]["add_conditioning"]
    if add_conditioning:
-      time_embed_dim = image_pipe.unet.time_embedding.linear_1.out_features
-      total_classes = len(training_filenames)
-      image_pipe.unet.config.class_embed_type = None
-      image_pipe.unet.class_embedding = nn.Embedding(total_classes, time_embed_dim, device=device)
+      del CONFIG_UNET['num_class_embeds']
+
+   model = UNet2DModel.from_config(CONFIG_UNET)
+   model = model.to(device)
+
 
    # Define scheduler
    total_steps = config_yaml["model_optimiser"]["total_steps"]
@@ -168,23 +170,24 @@ def test_train():
    scheduler.timesteps[0] = config_yaml["model_optimiser"]["scheduler_timesteps"]
 
    # Define optimization algorithm
-   optimizer = torch.optim.Adam(image_pipe.unet.parameters(), lr=learning_rate)
+   optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
    starting_epoch = config_yaml["model_optimiser"]["starting_epoch"]
    lowest_validation_loss = config_yaml["model_optimiser"]["lowest_validation_loss"]
    continues_training = config_yaml["model_optimiser"]["continues_training"]
    if continues_training:
-       image_pipe.unet.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
+       model.load_state_dict(torch.load('128xflawed_249.pth')) #Where to get 128xflawed_249.pth
        starting_epoch = 250
        optimizer.load_state_dict(torch.load('128x_optim_flawed.pth')) #Where to get 128x_optim_flawed.pth
 
 
    #####################
-   ##   4. TRAINING   ##
+   ##   3. TRAINING   ##
    #####################
    starttime = time.time()
    logger.info("Training started at {starttime}")
    for e in range(starting_epoch, epochs):
+      logger.info("epochs: " + str(e+1) + "/" + str(epochs))
       losses = []
       for step, batch in tqdm(enumerate(train_loader), total=len(train_loader)):
          # Sample an image from dataset and make it a three channel (RGB) image
@@ -197,28 +200,29 @@ def test_train():
          clean_images = clean_images.to(device)
          class_labels = class_labels.to(device)
 
+         # Encode image with VAE
+         with torch.no_grad():
+            clean_images = vae.encode(clean_images.to(device)).latent_dist.sample()
+
          # Sample noise to add to the images
          noise = torch.randn(clean_images.shape).to(clean_images.device)
 
          # Sample a random timestep for each image
          timesteps = torch.randint(
                0,
-               image_pipe.scheduler.num_train_timesteps,
+               scheduler.num_train_timesteps,
                (batch_size,),
                device=device,
          ).long()
 
          # Forward diffusion process (Add noise to the clean images according to the noise magnitude at each timestep)
-         noisy_images = image_pipe.scheduler.add_noise(clean_images, noise, timesteps)
-
-         # logger.info(f" clean_images size: {clean_images.shape}, class_labels: {class_labels}")
-         # logger.info(f" noisy_images size: {noisy_images.shape}, timesteps: {timesteps}")
+         noisy_images = scheduler.add_noise(clean_images, noise, timesteps)
 
          # Get the model prediction for the noise
          if add_conditioning:
-               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, class_labels=class_labels, return_dict=False)[0]
+               noise_pred = model(noisy_images.float(), timesteps, class_labels=None, return_dict=False)[0]
          else:
-               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, return_dict=False)[0]
+               noise_pred = model(noisy_images.float(), timesteps, return_dict=False)[0]
 
          # Compare the predicted noise with the actual noise
          loss = F.mse_loss(noise_pred, noise)
@@ -236,7 +240,7 @@ def test_train():
       average_epoch_loss = sum(losses)/len(losses)
 
       #######################
-      ##   5. VALIDATION   ##
+      ##   4. VALIDATION   ##
       #######################
 
       validation_losses = []
@@ -250,25 +254,29 @@ def test_train():
          clean_images = clean_images.to(device)
          class_labels = class_labels.to(device)
 
+         # Encode image with VAE
+         with torch.no_grad():
+            clean_images = vae.encode(clean_images.to(device)).latent_dist.sample()
+
          # Sample noise to add to the images
          noise = torch.randn(clean_images.shape).to(clean_images.device)
 
          # Sample a random timestep for each image
          timesteps = torch.randint(
                0,
-               image_pipe.scheduler.num_train_timesteps,
+               scheduler.num_train_timesteps,
                (batch_size,),
                device=device,
          ).long()
 
          # Forward diffusion process (Add noise to the clean images according to the noise magnitude at each timestep)
-         noisy_images = image_pipe.scheduler.add_noise(clean_images, noise, timesteps)
+         noisy_images = scheduler.add_noise(clean_images, noise, timesteps)
 
          # Get the model prediction for the noise
          if add_conditioning:
-               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, class_labels=class_labels, return_dict=False)[0]
+               noise_pred = model(noisy_images.float(), timesteps, class_labels=None, return_dict=False)[0]
          else:
-               noise_pred = image_pipe.unet(noisy_images.float(), timesteps, return_dict=False)[0]
+               noise_pred = model(noisy_images.float(), timesteps, return_dict=False)[0]
 
          # Compare the predicted noise with the actual noise
          loss = F.mse_loss(noise_pred, noise)
@@ -280,7 +288,7 @@ def test_train():
       average_validation_loss = sum(validation_losses)/len(validation_losses)
 
       ####################
-      ##   6. LOGGING   ##
+      ##   5. LOGGING   ##
       ####################
 
       # Log train/validation loss for this epoch
@@ -295,18 +303,23 @@ def test_train():
       if (e+1) % logging_interval == 0:
 
          # Generate a single random image via reverse diffusion process
-         x = torch.randn(batch_size, 3, int(image_size), int(image_size)).to(device) # noise
+         x = torch.randn(batch_size, 4, int(image_size)//8, int(image_size)//8).to(device) # noise
+
          for i, t in tqdm(enumerate(scheduler.timesteps)):
                model_input = scheduler.scale_model_input(x, t)
                with torch.no_grad():
                   if add_conditioning:
-                     # Conditiong on the 'Fetal brain' class (with index 1) because I am most familiar
-                     # with what these images look like
+                     # Conditioning on the 'Fetal brain' class (with index 1) because of familiarity we have
                      class_label = torch.ones(1, dtype=torch.int64)
-                     noise_pred = image_pipe.unet(model_input, t, class_label.to(device))["sample"]
+                     # noise_pred = model(model_input, t, class_labels=class_label.to(device))["sample"] #ValueError: class_embedding needs to be initialized in order to use class conditioning
+                     noise_pred = model(model_input, t, class_labels=None)["sample"]
                   else:
-                     noise_pred = image_pipe.unet(model_input, t)["sample"]
+                     noise_pred = model(model_input, t)["sample"]
                x = scheduler.step(noise_pred, t, x).prev_sample
+
+         # Encode and decode
+         with torch.no_grad():
+            x = vae.decode(x).sample
 
          # Convert final image to numpy
          validation_img = np.transpose(x[0,...].detach().cpu().numpy(), (1,2,0))
@@ -316,8 +329,8 @@ def test_train():
                images = wandb.Image(validation_img, caption="Epoch " + str(e))
                wandb.log({"Diffusion Image": images})
                wandb.log({"Average pixel value": np.mean(x.detach().cpu().numpy())})
-         # Log outputs normally (comment plt lines if you're not running this in a notebook)
-         else:
+
+         if PLOT_ENABLED:
                plt.imshow(validation_img)
                plt.show()
                logger.info("Average pixel value: " + str(np.mean(x.detach().cpu().numpy())))

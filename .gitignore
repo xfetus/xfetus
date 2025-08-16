@@ -62,3 +62,6 @@ dist/
 
 # wandb
 wandb/
+
+#uv TODO. include `uv.lock` in future iterations
+uv.lock

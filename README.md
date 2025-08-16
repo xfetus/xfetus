@@ -17,7 +17,8 @@ uv venv --python 3.12 # Create a virtual environment at .venv.
 source .venv/bin/activate #To activate the virtual environment
 uv pip install -e ".[test,learning]" # Install the package in editable mode
 uv pip list --verbose #check versions
-pre-commit run -a #pre-commit hooks
+uv run pre-commit install
+uv run pre-commit run --all-files #pre-commit hooks
 ```
 See further details for installation [here](docs/dependencies).
 
