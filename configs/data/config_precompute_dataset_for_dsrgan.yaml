@@ -2,8 +2,9 @@
 
 dataset:
     path: "datasets/FETAL_PLANES_DB_2020"
-    models_path: "datasets/FETAL_PLANES_DB_2020/models/dsrgantest"
+    # models_path: "datasets/FETAL_PLANES_DB_2020/models/dsrgantest"
+    models_path: "datasets/FETAL_PLANES_DB_2020/models/latentdiffusion"
     image_size: 128
-    train_dataset_size: 40 #4000
-    validation_dataset_size: 10 #1000
+    train_dataset_size: 20 #100 #4000
+    validation_dataset_size: 5 #25 #1000
 

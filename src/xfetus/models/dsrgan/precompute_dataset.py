@@ -26,7 +26,7 @@ if __name__ == "__main__":
     MODELS_PATH = os.path.join(Path.home(), models_path)
 
     if not os.path.exists(MODELS_PATH):
-        os.mkdir(MODELS_PATH)
+      os.makedirs(MODELS_PATH)
 
     # Load dataset csv metadata
     images_path = os.path.join(DATA_PATH, 'Images')

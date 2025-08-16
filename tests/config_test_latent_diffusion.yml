@@ -1,0 +1,73 @@
+AFRICAN_DATA_PATH: "datasets/african-fetal-us-2023/Zenodo_dataset"
+SPANISH_FETAL_PLANES_DATA_PATH: "datasets/FETAL_PLANES_DB_2020"
+CHECKPOINTS_PATH: "datasets/_TO_ADD_"
+MODELS_PATH: "datasets/FETAL_PLANES_DB_2020/models/latentdiffusion"
+ddpm_checkpoint_path: "TOADD" #File location for the pre-trained DDPM model
+optimizer_checkpoint_path: "TOADD" #File location for an optimizer from a previous run
+
+model:
+    name: "128x_baseline"
+    save_flag: False #True or False
+    config_unet: #Define UNET structure and parameters
+        _class_name: "UNet2DModel"
+        _diffusers_version: "0.0.4"
+        act_fn: "silu"
+        attention_head_dim: !!null #you can use !!null(None) 4, 8, 16, etc. depending on your needs).
+        block_out_channels: [
+            128,
+            128,
+            256,
+            256,
+        ]
+        center_input_sample: False
+        down_block_types: [
+            "DownBlock2D",
+            "DownBlock2D",
+            "AttnDownBlock2D",
+            "DownBlock2D"
+        ]
+        downsample_padding: 0
+        flip_sin_to_cos: False
+        freq_shift: 1
+        in_channels: 4
+        layers_per_block: 2
+        mid_block_scale_factor: 1
+        norm_eps: !!float 1e-06  # Explicitly marked as float
+        norm_num_groups: 32
+        out_channels: 4
+        sample_size: 16
+        time_embedding_type: "positional"
+        up_block_types: [
+            "UpBlock2D",
+            "AttnUpBlock2D",
+            "UpBlock2D",
+            "UpBlock2D"
+        ]
+        num_class_embeds: 6
+
+diffusers:
+    # model_name: "google/ddpm-celebahq-256"
+    model_name: "CompVis/stable-diffusion-v1-4"
+    vae_name: "stabilityai/sd-vae-ft-mse"
+
+wandb:
+    enabled: False #Enable weights and bias logging
+
+model_hyperparameters:
+    image_size: 128 #256 #64 #128
+    batch_size: 3
+    epochs: 5 #5000
+    learning_rate: !!float 1e-4
+    grad_accumulation_steps: 8
+
+model_optimiser:
+    total_steps: 1000
+    inference_steps: 40
+    scheduler_timesteps: 999
+    add_conditioning: True
+    continues_training: False
+    starting_epoch: 0
+    lowest_validation_loss: 100
+
+plot:
+    enabled: False #True or False

@@ -34,11 +34,10 @@ If you find this dataset useful, please cite:
 	* "Fetal brain images are further categorized into the 3 most common fetal brain planes (Trans-thalamic, Trans-cerebellum, Trans-ventricular) to judge fine grain categorization performance."
 
 
-### Download dataset
+### Download dataset: https://zenodo.org/records/3904280/files/FETAL_PLANES_ZENODO.zip
 ```
-https://zenodo.org/records/3904280/files/FETAL_PLANES_ZENODO.zip
 mkdir -p ~/datasets/FETAL_PLANES_DB_2020 && cd ~/datasets/FETAL_PLANES_DB_2020
-wget https://zenodo.org/records/3904280/files/FETAL_PLANES_ZENODO.zip
+wget https://zenodo.org/records/3904280/files/FETAL_PLANES_ZENODO.zip #[1.9GB]
 unzip FETAL_PLANES_ZENODO.zip
 rm FETAL_PLANES_ZENODO.zip
 ```
@@ -92,9 +91,9 @@ $ tree -fs
 ```
 mkdir -p ~/datasets/african-fetal-us-2023 && cd ~/datasets/african-fetal-us-2023
 wget https://zenodo.org/records/7540448/files/Zenodo_dataset.tar.xz
-tar xf Zenodo_dataset.tar.xz
+tar xf Zenodo_dataset.tar.xz #[41MB]
 rm Zenodo_dataset.tar.xz
-#mv mage to root data path
+#mv all images to root data path
 ```
 
 ### Images details
